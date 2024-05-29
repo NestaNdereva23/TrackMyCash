@@ -1,0 +1,171 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="logo"></div>
+        <ul class="menu">
+            <li lass="active">
+                <a href="#" ></a>
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+            </li>
+            <li>
+                <a href="#"></a>
+                    <i class="fas fa-user"></i>
+                    <span>Profile</span>
+            </li>
+            <li>
+                <a href="#"></a>
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistics</span>
+            </li>
+            <li class="logout">
+                <a href="#"></a>
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>LogOut</span>
+            </li>
+
+        </ul>
+    </div>
+    <div class="main--content">
+        <div class="header--wrapper">
+            <div class="header--title">
+                <span>Primary</span>
+                <h2>Dashboard</h2>
+            </div>
+            <div class="user--info">
+                <div class="search--box">
+                    <i class="fa solid fa-search"></i>
+                    <input type="text" placeholder="Search"/>
+                </div>
+                <img src="passport.jpg" alt="">
+            </div>
+        </div>
+
+        <!-- main body -->
+        
+        <div class="card--container">
+            <h3 class="main--title">Account Overview</h3>
+            <div class="card--wrapper">
+                <div class="payment--card light-blue">
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">
+                                Current Balance
+                            </span>
+                            <span class="amount--value">
+                                Ksh4,300.00
+                            </span>
+                        </div>
+                        <i class="fa-solid fa-wallet" id="icon"></i>
+                    </div>
+                    <!-- <span class="card--detail">**** **** **** 5361</span> -->
+
+                </div>
+                <div class="payment--card light-red">
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">
+                                Expenses
+                            </span>
+                            <span class="amount--value">
+                                Ksh7,300.00
+                            </span>
+                        </div>
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                    </div>
+                    <!-- <span class="card--detail">**** **** **** 5361</span> -->
+
+                </div>
+                <div class="payment--card light-green">
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">
+                                Income
+                            </span>
+                            <span class="amount--value">
+                                Ksh21,000.00
+                            </span>
+                        </div>
+                        <i class="fa-solid fa-sack-dollar"></i>
+                    </div>
+                    <!-- <span class="card--detail">**** **** **** 5361</span> -->
+
+                </div>
+
+            </div>
+        </div>
+        <div class="tabular--wrapper">
+            <h3 class="main--title">Transactions</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>                          
+                            <th>Account</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Mpesa
+                            </td>
+                            <td>
+                                Transport
+                            </td>
+                            <td>
+                                -Ksh420.00
+                            </td>
+                            <td>
+                                2024-05-15
+                            </td>
+                            <td>
+                                edit
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Cash
+                            </td>
+                            <td>
+                                Shopping
+                            </td>
+                            <td>
+                                -Ksh420.00
+                            </td>
+                            <td>
+                                2024-05-15
+                            </td>
+                            <td>
+                                edit
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="7">Total: Kshs840.00</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    
+</body>
+</html>
