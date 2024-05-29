@@ -76,12 +76,28 @@ WSGI_APPLICATION = 'TrackMyCash.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+SQLITE_DB_PATH =  os.path.join(BASE_DIR, env('SQLITE_DB_PATH'))
+if env('DATABASE_TYPE') == 'sqlite':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': SQLITE_DB_PATH,
+        }
     }
-}
+elif env('DATABASE_TYPE') == 'postgresql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('POSTGRES_DB_NAME'),
+            'USER': env('POSTGRES_DB_USER'),
+            'PASSWORD': env('POSTGRES_DB_PASSWORD'),
+            'HOST': env('POSTGRES_DB_HOST'),
+            'PORT': env('POSTGRES_DB_PORT'),
+        }
+    }
+else:
+    raise ValueError("Unknown database type specified in DATABASE_TYPE.")
+[...]
 
 
 # Password validation
@@ -126,5 +142,3 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = 'login'
-LOGIN_REDIRECT_URL = 'dashboard'
