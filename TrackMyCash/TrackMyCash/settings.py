@@ -1,6 +1,7 @@
 """
 Django settings for TrackMyCash project.
 """
+# 47sx@v_=eecv7a93!^ddp3nohi*i(9_ijlt*c6@0z=ee9@n=#0
 import environ
 import os
 from pathlib import Path
@@ -9,7 +10,6 @@ from environ import Env
 env = environ.Env(
 )
 environ.Env.read_env()
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +22,6 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
-
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
@@ -72,18 +71,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'TrackMyCash.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-SQLITE_DB_PATH =  os.path.join(BASE_DIR, env('SQLITE_DB_PATH'))
+# SQLITE_DB_PATH = os.path.join(BASE_DIR, env('SQLITE_DB_PATH'))
 if env('DATABASE_TYPE') == 'sqlite':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': SQLITE_DB_PATH,
-        }
-    }
+    pass
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': SQLITE_DB_PATH,
+    #     }
+    # }
 elif env('DATABASE_TYPE') == 'postgresql':
     DATABASES = {
         'default': {
@@ -98,7 +97,6 @@ elif env('DATABASE_TYPE') == 'postgresql':
 else:
     raise ValueError("Unknown database type specified in DATABASE_TYPE.")
 [...]
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -118,7 +116,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -129,7 +126,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -142,3 +138,5 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'dashboard'

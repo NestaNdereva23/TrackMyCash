@@ -4,6 +4,7 @@
 .env/
 TrackMyCash/TrackMyCash/.env
 TrackMyCash/db.sqlite3
+TrackMyCash/venv
 
 *.sqlite
 *.sqlite3

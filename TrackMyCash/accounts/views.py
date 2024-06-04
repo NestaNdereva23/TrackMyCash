@@ -12,7 +12,7 @@ def landingpage(request):
 
 
 #userregistration
-def userregistration(request):
+def registrationPage(request):
     form = CreateUserForm(request.POST)
 
     if request.method == "POST":
@@ -29,7 +29,7 @@ def userregistration(request):
     
 
 #Userlogin view
-def userlogin(request):
+def loginPage(request):
     
     if request.method == "POST":
 
@@ -39,12 +39,20 @@ def userlogin(request):
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, username)
+            login(request, user)
             return redirect('dashboard')
+        else:
+            return ("Invalid login")
 
     return render(request, "registration/login.html")
 
-
+#dashboard view
 @login_required
 def dashboard(request):
     return render(request, "accounts/dashboard.html")
+
+#userlogout view
+@login_required
+def logoutPage(request):
+    logout(request)
+    return redirect('landingpage')
