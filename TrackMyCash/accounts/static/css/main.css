@@ -292,6 +292,31 @@ nav{
     justify-content: space-between;
     transition: all 0.5s ease-in-out;
 }
+.add--expense{
+    background: #606060;
+    border-radius: 100%;
+    padding: 1.2rem;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.5s ease-in-out;
+}
+.button{
+    padding: 1.2rem;
+    color: red;
+    align-items: center;
+    text-align: center;
+    font-weight: bold;
+
+
+}
+.button .button--link{
+    text-align: center;
+    align-items: center;
+
+}
 .payment--card:hover{
     transform: translateY(-5px);
 }
@@ -301,6 +326,7 @@ nav{
     align-items: center;
     margin-bottom: 20px;
 }
+
 .amount{
     display: flex;
     flex-direction: column;
@@ -341,6 +367,9 @@ nav{
 }
 .dark-red{
     background: red;
+}
+.light-grey{
+    background: rgb(187, 185, 185);
 }
 .dark-blue{
     background: darkblue;

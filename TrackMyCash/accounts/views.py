@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse,HttpRequest
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm
+from .forms import CreateUserForm, ExpenseForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
@@ -41,8 +41,8 @@ def loginPage(request):
         if user is not None:
             login(request, user)
             return redirect('dashboard')
-        else:
-            return ("Invalid login")
+        # else:
+        #     return ("Invalid login")
 
     return render(request, "registration/login.html")
 
@@ -56,3 +56,17 @@ def dashboard(request):
 def logoutPage(request):
     logout(request)
     return redirect('landingpage')
+
+@login_required
+def addexpensePage(request):
+    form = ExpenseForm(request.POST)
+
+    if request.method == "POST":
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    # else:
+    #     form = ExpenseForm(request.POST)
+
+    return render(request, "accounts/addexpense.html", {"form":form})
