@@ -13,27 +13,30 @@
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="menu">
-            <li lass="active">
-                <a href="#" ></a>
+            <li class="active">
+                <a href="#">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
+                </a>
             </li>
             <li>
-                <a href="#"></a>
+                <a href="#">
                     <i class="fas fa-user"></i>
                     <span>Profile</span>
+                </a>
             </li>
             <li>
-                <a href="#"></a>
+                <a href="#">
                     <i class="fas fa-chart-bar"></i>
                     <span>Statistics</span>
+                </a>
             </li>
             <li class="logout">
-                <a href="#"></a>
+                <a href="{% url 'logout' %}">
                     <i class="fas fa-sign-out-alt"></i>
-                <span><a href="{% url 'logout' %}">LogOut</a></span>
+                    <span>LogOut</span>
+                </a>
             </li>
-
         </ul>
     </div>
     <div class="main--content">
@@ -52,60 +55,39 @@
         </div>
 
         <!-- main body -->
-        
         <div class="card--container">
             <h3 class="main--title">Account Overview</h3>
             <div class="card--wrapper">
                 <div class="payment--card light-blue">
                     <div class="card--header">
                         <div class="amount">
-                            <span class="title">
-                                Current Balance
-                            </span>
-                            <span class="amount--value">
-                                Ksh4,300.00
-                            </span>
+                            <span class="title">Current Balance</span>
+                            <span class="amount--value">Ksh4,300.00</span>
                         </div>
                         <i class="fa-solid fa-wallet" id="icon"></i>
                     </div>
-                    <!-- <span class="card--detail">**** **** **** 5361</span> -->
-
                 </div>
                 <div class="payment--card light-red">
                     <div class="card--header">
                         <div class="amount">
-                            <span class="title">
-                                Expenses
-                            </span>
+                            <span class="title">Expenses</span>
                             <span class="amount--value">
-                                Ksh7,300.00
+                                <p>{{ total_expenses }}</p>
                             </span>
                         </div>
                         <i class="fa-solid fa-file-invoice-dollar"></i>
                     </div>
-                    <!-- <span class="card--detail">**** **** **** 5361</span> -->
-
                 </div>
                 <div class="payment--card light-green">
                     <div class="card--header">
                         <div class="amount">
-                            <span class="title">
-                                Income
-                            </span>
-                            <span class="amount--value">
-                                Ksh21,000.00
-                            </span>
+                            <span class="title">Income</span>
+                            <span class="amount--value">Ksh21,000.00</span>
                         </div>
                         <i class="fa-solid fa-sack-dollar"></i>
                     </div>
-                    <!-- <span class="card--detail">**** **** **** 5361</span> -->
-
                 </div>
                 <a href="{% url 'addexpense' %}">Add Expense</a>
-
-                
-                
-
             </div>
         </div>
         <div class="tabular--wrapper">
@@ -113,7 +95,7 @@
             <div class="table-container">
                 <table>
                     <thead>
-                        <tr>                          
+                        <tr>
                             <th>Account</th>
                             <th>Category</th>
                             <th>Amount</th>
@@ -121,55 +103,25 @@
                             <th>Action</th>
                         </tr>
                     </thead>
+                    {% for expense in expenses %}
                     <tbody>
                         <tr>
-                            <td>
-                                Mpesa
-                            </td>
-                            <td>
-                                Transport
-                            </td>
-                            <td>
-                                -Ksh420.00
-                            </td>
-                            <td>
-                                2024-05-15
-                            </td>
-                            <td>
-                                edit
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Cash
-                            </td>
-                            <td>
-                                Shopping
-                            </td>
-                            <td>
-                                -Ksh420.00
-                            </td>
-                            <td>
-                                2024-05-15
-                            </td>
-                            <td>
-                                edit
-                            </td>
+                            <td>{{ expense.account }}</td>
+                            <td>{{ expense.expense_category }}</td>
+                            <td>{{ expense.expense_amount }}</td>
+                            <td>{{ expense.date_added }}</td>
+                            <td><a href="#">edit</a></td>
                         </tr>
                     </tbody>
+                    {% endfor %}
                     <tfoot>
                         <tr>
-                            <td colspan="7">Total: Kshs840.00</td>
+                            <td colspan="5"><a href="{% url 'test' %}">total</a></td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
-
         </div>
-
     </div>
-
-
-    
 </body>
 </html>

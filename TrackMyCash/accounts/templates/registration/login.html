@@ -161,7 +161,7 @@ a{
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form method="POST" action="">
+    <form method="POST" action="" autocomplete="off">
         {% csrf_token %}
 
         <!-- display success login message -->
@@ -179,7 +179,7 @@ a{
 
         <a class="a-forgot" href="#">forgot password?</a>
         <button>Log In</button>
-        <input type="hidden" name="next" value="{{ next }}">
+        <input type="hidden" name="next" value="{{next}}">
         <div class="social">
           <div class="go"><i class="fab fa-google"></i>  Google</div>
           <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>

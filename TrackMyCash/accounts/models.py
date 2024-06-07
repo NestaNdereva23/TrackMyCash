@@ -14,31 +14,31 @@ class Expenses(models.Model):
         ("WiFi", "WiFi"),
     ]
 
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ACCOUNT_CATEGORY = [
+        ("Mpesa", "Mpesa"),
+        ("Cash", "Cash"),
+        ("Bank", "Bank"),
+    ]
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
+    expense_category = models.CharField(max_length=15, choices=EXPENSE_CATEGORY, default="Car")
+    description = models.CharField(max_length=1000, blank=True, null=True)
     expense_amount = models.DecimalField(max_digits=10, decimal_places=2)
     date_added = models.DateTimeField(default=timezone.now)
-    expense_category = models.CharField(max_length=15, choices=EXPENSE_CATEGORY, default="Car")
-
+     
+   
     # def __str__(self):
         # return f"{self.user.username}'s expense on {self.date_added.strftime('%Y-%m-%d')}"
 
 
-    
-    # def date_added(self):
-    #     publication=timezone.now()
-    #     self.save()
 
 
 
 
 
 
-# initial_amount =
-# expense_amount=
-# income_amount=
-# dateadded=
-# type_of_expense=
-# type_of_income=
-# current_balance=
+
+
 
 

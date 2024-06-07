@@ -16,7 +16,7 @@ class CreateUserForm(UserCreationForm):
 class ExpenseForm(ModelForm):
     class Meta:
         model = Expenses
-        fields = ['expense_amount', 'date_added', 'expense_category']
+        fields = ['account', 'expense_category', 'expense_amount', 'description', 'date_added' ]
         widgets = {
             'date_added': DateTimeInput(attrs={'type': 'datetime-local'}),
         }

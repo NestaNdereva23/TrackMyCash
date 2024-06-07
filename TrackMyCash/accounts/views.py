@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse,HttpRequest
+from django.db.models import Sum
+from .models import Expenses
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, ExpenseForm
 from django.contrib.auth import authenticate, login, logout
@@ -49,7 +50,14 @@ def loginPage(request):
 #dashboard view
 @login_required
 def dashboard(request):
-    return render(request, "accounts/dashboard.html")
+
+    #display added expenses return for current user
+    expenses = Expenses.objects.filter(user=request.user)
+
+    total_expenses = expenses.aggregate(total=Sum('expense_amount'))['total'] or 0
+    
+
+    return render(request, "accounts/dashboard.html", {"expenses":expenses, "total_expenses":total_expenses})
 
 #userlogout view
 @login_required
@@ -57,6 +65,7 @@ def logoutPage(request):
     logout(request)
     return redirect('landingpage')
 
+#add expense view
 @login_required
 def addexpensePage(request):
     form = ExpenseForm(request.POST)
@@ -64,9 +73,25 @@ def addexpensePage(request):
     if request.method == "POST":
         form = ExpenseForm(request.POST)
         if form.is_valid():
-            form.save()
+            expense = form.save(commit=False)
+            expense.user = request.user
+            expense.save()
             return redirect('dashboard')
-    # else:
-    #     form = ExpenseForm(request.POST)
+    else:
+         form = ExpenseForm()
 
     return render(request, "accounts/addexpense.html", {"form":form})
+
+
+
+
+def test(request):
+
+    # total_expenses = Expenses.objects.annotate(total_expenses=Sum("expense_amount"))
+
+    expenses = Expenses.objects.filter(user=request.user)
+
+    total_expenses = expenses.aggregate(total=Sum('expense_amount'))['total'] or 0
+
+
+    return render(request, "accounts/test.html", {"total_expenses":total_expenses, "expenses":expenses}  )
