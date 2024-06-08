@@ -1,12 +1,15 @@
 {% load static %}
-
+{% load humanize %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
 </head>
 
 <body>
@@ -62,7 +65,7 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Current Balance</span>
-                            <span class="amount--value">Ksh4,300.00</span>
+                            <span class="amount--value">Ks0.00</span>
                         </div>
                         <i class="fa-solid fa-wallet" id="icon"></i>
                     </div>
@@ -72,7 +75,7 @@
                         <div class="amount">
                             <span class="title">Expenses</span>
                             <span class="amount--value">
-                                <p>{{ total_expenses }}</p>
+                                <p>{{ total_expenses|intcomma }}</p>
                             </span>
                         </div>
                         <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -82,12 +85,13 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Income</span>
-                            <span class="amount--value">Ksh21,000.00</span>
+                            <span class="amount--value">Ksh0.00</span>
                         </div>
                         <i class="fa-solid fa-sack-dollar"></i>
                     </div>
                 </div>
-                <a href="{% url 'addexpense' %}">Add Expense</a>
+
+                <a href="{% url 'addexpense' %}" class="btn btn-secondary">Add Expense <br> + </a>
             </div>
         </div>
         <div class="tabular--wrapper">
@@ -96,6 +100,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th>Transaction type</th>
                             <th>Account</th>
                             <th>Category</th>
                             <th>Amount</th>
@@ -104,21 +109,29 @@
                         </tr>
                     </thead>
                     {% for expense in expenses %}
+                    
                     <tbody>
                         <tr>
+                            {% if expense.transaction_type == 'Income' %}
+                            <td class="text-success"">{{expense.transaction_type}}</td>
+                            {% elif expense.transaction_type == 'Expense' %}
+                            <td class="text-danger"">{{expense.transaction_type}}</td>
+                            {% else %}
+                            <td class="text-primary"">{{expense.transaction_type}}</td>
+                            {% endif %}
                             <td>{{ expense.account }}</td>
                             <td>{{ expense.expense_category }}</td>
-                            <td>{{ expense.expense_amount }}</td>
+                            <td>{{ expense.expense_amount|intcomma }}</td>
                             <td>{{ expense.date_added }}</td>
                             <td><a href="#">edit</a></td>
                         </tr>
                     </tbody>
                     {% endfor %}
-                    <tfoot>
+                    <!-- <tfoot>
                         <tr>
                             <td colspan="5"><a href="{% url 'test' %}">total</a></td>
                         </tr>
-                    </tfoot>
+                    </tfoot> -->
                 </table>
             </div>
         </div>
