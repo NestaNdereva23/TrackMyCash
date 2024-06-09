@@ -42,45 +42,47 @@
     <section>
         <div class="">
             <div class="header">
-                <a href="#">Dashboard</a>
-                <a href="#">Logout</a>
+                <a href="{% url 'dashboard' %}">Dashboard</a>
+                <a href="{% url 'logout' %}">Logout</a>
             </div>
         </div>
     </section>
+        <!-- card-selection section -->
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">Add Expense</h3>
+                                <a href="{% url 'addtransaction' %}" class="btn btn-primary">+</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h3 class="card-title">Add Income</h3>
+                                <a href="{% url 'addincome' %}" class="btn btn-primary">+</a>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+         </section>
+  <!-- Form section -->
     <form action="" method="post">
         {% csrf_token %}
         <div class="form-group">
+                {{ form.as_p }}
+       </div>
 
-            {{ form.as_p }}
-
-        </div>
-            
-        <input type="submit" name="submit" class="btn btn-primary">
-
-    <!-- Form section -->
-    <!-- <form action="" method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.account }}
-        </div>
-        <div class="form-group">
-            {{ form.expense_category }}
-        </div>
-        <div class="form-group">
-            {{ form.expense_amount }}
-        </div>
-        <div class="form-group">
-            {{ form.description }}
-        </div>
-        <div class="form-group">
-            {{ form.date_added }}
-        </div>
-        <input type="submit" name="submit" class="btn btn-primary" value="Submit"> -->
+       <input type="submit" class="btn btn-primary">
     </form>
+
     
 </body>
 </html>
 
 
 
-</form>

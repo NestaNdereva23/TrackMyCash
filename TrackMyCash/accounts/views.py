@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.db.models import Sum
-from .models import Expenses
+from .models import Expenses, Income
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm, ExpenseForm
+from .forms import CreateUserForm, ExpenseForm, IncomeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
@@ -53,11 +53,22 @@ def dashboard(request):
 
     #display added expenses return for current user
     expenses = Expenses.objects.filter(user=request.user)
+    incomes = Income.objects.filter(user=request.user)
 
-    total_expenses = expenses.aggregate(total=Sum('expense_amount'))['total'] or 0
-    
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
+    current_balance = total_income - total_expenses
 
-    return render(request, "accounts/dashboard.html", {"expenses":expenses, "total_expenses":total_expenses})
+    #combine exenses and incomes
+    transactions = list(expenses) + list(incomes)
+    transactions.sort(key=lambda x: x.date_added, reverse=True)
+
+    return render(request, "accounts/dashboard.html",{
+        "transactions":transactions, 
+        "total_expenses":total_expenses, 
+        "total_income":total_income,
+        "current_balance": current_balance
+        })
 
 #userlogout view
 @login_required
@@ -67,31 +78,40 @@ def logoutPage(request):
 
 #add expense view
 @login_required
-def addexpensePage(request):
+def addtransactionPage(request):
     form = ExpenseForm(request.POST)
-
+    
     if request.method == "POST":
         form = ExpenseForm(request.POST)
         if form.is_valid():
             expense = form.save(commit=False)
             expense.user = request.user
             expense.save()
-            return redirect('dashboard')
+            return redirect('dashboard')        
     else:
-         form = ExpenseForm()
+         form = ExpenseForm()   
 
-    return render(request, "accounts/addexpense.html", {"form":form})
+    return render(request, "accounts/addtransaction.html", {"form":form})
 
+#add income view
+@login_required
+def addincomePage(request):
+    form = IncomeForm(request.POST)
 
+    if request.method == "POST":
+        form = IncomeForm(request.POST)
+        if form.is_valid():
+            income = form.save(commit=False)
+            income.user = request.user
+            income.save()
+            return redirect('dashboard')
+        else:
+            form = IncomeForm()
+
+    return render(request, "accounts/addincome.html", {"form":form})   
 
 
 def test(request):
 
-    # total_expenses = Expenses.objects.annotate(total_expenses=Sum("expense_amount"))
-
-    expenses = Expenses.objects.filter(user=request.user)
-
-    total_expenses = expenses.aggregate(total=Sum('expense_amount'))['total'] or 0
-
-
-    return render(request, "accounts/test.html", {"total_expenses":total_expenses, "expenses":expenses}  )
+    pass
+    return render(request, "accounts/test.html"  )

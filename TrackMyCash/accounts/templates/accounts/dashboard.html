@@ -65,7 +65,7 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Current Balance</span>
-                            <span class="amount--value">Ks0.00</span>
+                            <span class="amount--value">{{current_balance|intcomma}}</span>
                         </div>
                         <i class="fa-solid fa-wallet" id="icon"></i>
                     </div>
@@ -85,13 +85,13 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Income</span>
-                            <span class="amount--value">Ksh0.00</span>
+                            <span class="amount--value">{{ total_income|intcomma }}</span>
                         </div>
                         <i class="fa-solid fa-sack-dollar"></i>
                     </div>
                 </div>
 
-                <a href="{% url 'addexpense' %}" class="btn btn-secondary">Add Expense <br> + </a>
+                <a href="{% url 'addtransaction' %}" class="btn btn-secondary">Add Expense <br> + </a>
             </div>
         </div>
         <div class="tabular--wrapper">
@@ -108,21 +108,22 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    {% for expense in expenses %}
+                    {% for transaction in transactions %}
                     
                     <tbody>
                         <tr>
-                            {% if expense.transaction_type == 'Income' %}
-                            <td class="text-success"">{{expense.transaction_type}}</td>
-                            {% elif expense.transaction_type == 'Expense' %}
-                            <td class="text-danger"">{{expense.transaction_type}}</td>
+                            {% if transaction.transaction_type == 'Income' %}
+                            <td class="text-success"">{{transaction.transaction_type}}</td>
+                            {% elif transaction.transaction_type == 'Expense' %}
+                            <td class="text-danger"">{{transaction.transaction_type}}</td>
                             {% else %}
-                            <td class="text-primary"">{{expense.transaction_type}}</td>
+                            <td class="text-primary"">{{transaction.transaction_type}}</td>
                             {% endif %}
-                            <td>{{ expense.account }}</td>
-                            <td>{{ expense.expense_category }}</td>
-                            <td>{{ expense.expense_amount|intcomma }}</td>
-                            <td>{{ expense.date_added }}</td>
+                            <td>{{ transaction.account }}</td>
+                            <td>{{ transaction.category }}</td>
+                            <td>{{ transaction.amount|intcomma }}</td>
+                            <!-- <td>{{ transaction.description }}</td> -->
+                             <td>{{ transaction.date_added }}</td>
                             <td><a href="#">edit</a></td>
                         </tr>
                     </tbody>
