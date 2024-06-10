@@ -2,8 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Design by foolishdeveloper.com -->
-    <title>Glassmorphism login Form Tutorial in html css</title>
+    <title>Register</title>
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -142,6 +141,7 @@ a{
 form h5{
     color: #ea1313;
 }
+
     </style>
 </head>
 <body>
@@ -166,7 +166,7 @@ form h5{
         <h5>{{ form.errors.username }}</h5>
 
         <label for="email">Email..</label>
-        {{ form.email }}
+        <h5>{{ form.email }}</h5>
 
         <label for="password1">Create Password</label>
         {{form.password1}}

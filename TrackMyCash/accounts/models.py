@@ -26,7 +26,7 @@ class Expenses(models.Model):
 
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    transaction_type = models.CharField(max_length=15, choices=TRANSACTION_TYPE, default="Expense")
+    transaction_type = models.CharField(max_length=15, choices=TRANSACTION_TYPE, default="Expense", )
     account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
     category = models.CharField(max_length=15, choices=EXPENSE_CATEGORY, default="Car")    
     description = models.CharField(max_length=1000, blank=True, null=True)

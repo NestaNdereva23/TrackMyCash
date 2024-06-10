@@ -10,6 +10,14 @@ class CreateUserForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2' ]
 
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError("error")
+        return email
+
+
+
 class ExpenseForm(ModelForm):
     class Meta:
         model = Expenses

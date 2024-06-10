@@ -33,7 +33,6 @@ def registrationPage(request):
 def loginPage(request):
     
     if request.method == "POST":
-
         username = request.POST.get('username')
         password = request.POST.get('password')
 
@@ -42,8 +41,8 @@ def loginPage(request):
         if user is not None:
             login(request, user)
             return redirect('dashboard')
-        # else:
-        #     return ("Invalid login")
+        else:
+            messages.warning(request, "Invalid credentials")
 
     return render(request, "registration/login.html")
 
