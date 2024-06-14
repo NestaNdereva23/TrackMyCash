@@ -132,7 +132,7 @@
                              <td>{{ transaction.date_added }}</td>
                             
                             {% if transaction.transaction_type == 'Income' %}
-                             <td><a href="#">edit</a></td>
+                            <td><a href="{% url 'income-edit' transaction.pk %}">edit</a></td>
                             {% elif transaction.transaction_type == 'Expense' %}
                             <td><a href="{% url 'expense-edit' transaction.pk %}">edit</a></td>
                             {% else %}

@@ -6,6 +6,8 @@ from .forms import CreateUserForm, ExpenseForm, IncomeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.generic import UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 
 
 #landingpage view
@@ -111,10 +113,16 @@ def addincomePage(request):
     return render(request, "accounts/addincome.html", {"form":form})   
 
 
-
-# @login_required
-class ExpenseTransactionUpdateView(UpdateView):
+class ExpenseTransactionUpdateView(LoginRequiredMixin, UpdateView):
     model = Expenses
     form_class = ExpenseForm
     template_name = "accounts/addtransaction.html"
     success_url = "/trackmycash/dashboard/"
+    login_url = reverse_lazy("login")
+
+class IncomeTransactionUpdateView(LoginRequiredMixin, UpdateView):
+    model = Income
+    form_class = IncomeForm
+    template_name = "accounts/addincome.html"
+    success_url = "/trackmycash/dashboard/"
+    login_url = reverse_lazy("login")
