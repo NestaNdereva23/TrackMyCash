@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, ExpenseForm, IncomeForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from django.views.generic import UpdateView
 
 
 #landingpage view
@@ -110,7 +111,10 @@ def addincomePage(request):
     return render(request, "accounts/addincome.html", {"form":form})   
 
 
-def test(request):
 
-    pass
-    return render(request, "accounts/test.html"  )
+# @login_required
+class ExpenseTransactionUpdateView(UpdateView):
+    model = Expenses
+    form_class = ExpenseForm
+    template_name = "accounts/addtransaction.html"
+    success_url = "/trackmycash/dashboard/"

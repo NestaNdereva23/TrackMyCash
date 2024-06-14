@@ -1,5 +1,6 @@
 from django.urls import path, include
 from . import views
+from .views import ExpenseTransactionUpdateView
 
 
 urlpatterns = [
@@ -9,7 +10,7 @@ urlpatterns = [
     path("dashboard/logout/", views.logoutPage, name="logout"),
     path("dashboard/", views.dashboard, name="dashboard"),
     path("dashboard/addtransaction/", views.addtransactionPage, name="addtransaction"),
-    # path("dashboard/addtransaction/addexpense", views.addtransactionPage, name="addexpense"),
     path("dashboard/addtransaction/addincome", views.addincomePage, name="addincome"),
-    path("dashboard/test/", views.test, name="test"),
+    path('dashboard/addtransaction/<int:pk>/edit/', ExpenseTransactionUpdateView.as_view(), name='expense-edit'),
+    # path("dashboard/test/", views.test, name="test"),
 ]

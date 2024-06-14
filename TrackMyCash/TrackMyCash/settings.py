@@ -1,7 +1,6 @@
 """
 Django settings for TrackMyCash project.
 """
-# 47sx@v_=eecv7a93!^ddp3nohi*i(9_ijlt*c6@0z=ee9@n=#0
 import environ
 import os
 from pathlib import Path

@@ -130,13 +130,21 @@
                             <td>{{ transaction.amount|intcomma }}</td>
                             <!-- <td>{{ transaction.description }}</td> -->
                              <td>{{ transaction.date_added }}</td>
+                            
+                            {% if transaction.transaction_type == 'Income' %}
+                             <td><a href="#">edit</a></td>
+                            {% elif transaction.transaction_type == 'Expense' %}
+                            <td><a href="{% url 'expense-edit' transaction.pk %}">edit</a></td>
+                            {% else %}
                             <td><a href="#">edit</a></td>
+                            {% endif %}
+                            
                         </tr>
                     </tbody>
                     {% endfor %}
                     <!-- <tfoot>
                         <tr>
-                            <td colspan="5"><a href="{% url 'test' %}">total</a></td>
+                            <td colspan="5"><a href="#">total</a></td>
                         </tr>
                     </tfoot> -->
                 </table>

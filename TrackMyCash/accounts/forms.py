@@ -17,7 +17,6 @@ class CreateUserForm(UserCreationForm):
         return email
 
 
-
 class ExpenseForm(ModelForm):
     class Meta:
         model = Expenses
