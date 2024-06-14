@@ -75,6 +75,10 @@
         {% csrf_token %}
         <div class="form-group">
                 {{ form.as_p }}
+
+        {% for message in messages %}
+            <h4>{{message}}</h4>
+        {% endfor %}
        </div>
 
        <input type="submit" class="btn btn-primary">
