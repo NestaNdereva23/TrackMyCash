@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Sum
 from .models import Expenses, Income
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm, ExpenseForm, IncomeForm
+from .forms import CreateUserForm, ExpenseForm, IncomeForm, TransferForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.generic import UpdateView
@@ -112,6 +112,11 @@ def addincomePage(request):
 
     return render(request, "accounts/addincome.html", {"form":form})   
 
+@login_required
+def transferPage(request):
+    form = TransferForm(request.POST)
+
+    return render(request, "accounts/transfer.html", {"form":form}) 
 
 class ExpenseTransactionUpdateView(LoginRequiredMixin, UpdateView):
     model = Expenses

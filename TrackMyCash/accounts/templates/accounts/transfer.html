@@ -18,6 +18,7 @@
     .field-required .errorlist {
     display: none;
 }
+
 </style>
 <body>
     <!-- navbar section -->
@@ -60,27 +61,18 @@
             </div>
         </div>
         </section>
-  <!-- Form section -->
-  <form method="post" class="form-control-lg bg-light">
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-    <div class="fieldWrapper field-required col-6 mx-auto py-2">
-        {{ form }}
-        <div class="error-message">
-            {{ form.required_field.errors }}
-        </div>
-        <br>
-        <button type="submit" class="btn-success">Submit</button>
-    </div>
-    <br>
-    
-</form>
 
-
-
-    
-</body>
-</html>
-
-
-
+        <form method="post" class="form-control-lg bg-light">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="fieldWrapper field-required col-6 mx-auto py-2">
+                {{ form }}
+                <div class="error-message">
+                    {{ form.required_field.errors }}
+                </div>
+                <br>
+                <button type="submit" class="btn-success">Submit</button>
+            </div>
+            <br>
+            
+        </form>
