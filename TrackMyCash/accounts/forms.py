@@ -68,8 +68,5 @@ class TransferForm(ModelForm):
             'description': forms.TextInput(attrs={'class': 'form-control equal-width'}),
             'date_added': DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control equal-width', 'value': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M")}),
         }
-        def clean_date_added(self):
-            date = self.cleaned_data['date_added']
-            if date > datetime.date.today():  # 🖘 raise error if greater than
-                raise forms.ValidationError(" invalid date!")
-            return date
+        
+           
