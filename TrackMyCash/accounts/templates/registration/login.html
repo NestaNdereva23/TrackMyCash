@@ -176,7 +176,7 @@ a{
         <label for="password">Password</label>
         <input type="password" placeholder="Password" id="password" name="password">
 
-        <a class="a-forgot" href="#">forgot password?</a>
+        <a class="a-forgot" href="{% url 'password_reset' %}">forgot password?</a>
         <button>Log In</button>
         <input type="hidden" name="next" value="{{next}}">
         <div class="social">

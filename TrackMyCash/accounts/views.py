@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Sum
+from django.contrib.auth.models import User
 from .models import Expenses, Income
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, ExpenseForm, IncomeForm, TransferForm
@@ -8,6 +9,7 @@ from django.contrib import messages
 from django.views.generic import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetView
 
 
 #landingpage view
@@ -131,3 +133,10 @@ class IncomeTransactionUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "accounts/addincome.html"
     success_url = "/trackmycash/dashboard/"
     login_url = reverse_lazy("login")
+
+class CustomPasswordResetView(PasswordResetView):
+    model = User
+    template_name = 'registration/password_reset_form.html'
+    email_template_name = 'registration/password_reset_email.html'
+    subject_template_name = 'registration/password_reset_subject.txt'
+    success_url = reverse_lazy('password_reset_done')
