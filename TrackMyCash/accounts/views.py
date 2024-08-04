@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,HttpResponse,get_object_or_404
 from django.db.models import Sum
 from django.contrib.auth.models import User
 from .models import Expenses, Income
@@ -120,6 +120,19 @@ def transferPage(request):
 
     return render(request, "accounts/transfer.html", {"form":form}) 
 
+@login_required
+def delete_transaction(request, pk, model_type):
+
+    if model_type == 'expense':
+        transaction = get_object_or_404(Expenses, pk=pk)
+    elif model_type == 'income':
+        transaction = get_object_or_404(Income, pk=pk)
+    else:
+        return HttpResponse('eRROR')
+    
+    transaction.delete()
+    return HttpResponse("")
+    
 class ExpenseTransactionUpdateView(LoginRequiredMixin, UpdateView):
     model = Expenses
     form_class = ExpenseForm

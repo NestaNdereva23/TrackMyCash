@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
-    'bootstrap5',
+    # 'bootstrap5',
 ]
 
 MIDDLEWARE = [
@@ -74,30 +74,42 @@ WSGI_APPLICATION = 'TrackMyCash.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+SQLITE_DB_PATH = os.path.join(BASE_DIR, 'db.sqlite3')
+    
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': SQLITE_DB_PATH,
+    }
+}
+
+# SQLITE_DB_PATH = env('SQLITE_DB_PATH', default='./TrackMyCash/')
+# DATABASE_TYPE = env('DATABASE_TYPE', default='sqlite')
 
 # SQLITE_DB_PATH = os.path.join(BASE_DIR, env('SQLITE_DB_PATH'))
-if env('DATABASE_TYPE') == 'sqlite':
-    pass
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': SQLITE_DB_PATH,
-    #     }
-    # }
-elif env('DATABASE_TYPE') == 'postgresql':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': env('POSTGRES_DB_NAME'),
-            'USER': env('POSTGRES_DB_USER'),
-            'PASSWORD': env('POSTGRES_DB_PASSWORD'),
-            'HOST': env('POSTGRES_DB_HOST'),
-            'PORT': env('POSTGRES_DB_PORT'),
-        }
-    }
-else:
-    raise ValueError("Unknown database type specified in DATABASE_TYPE.")
-[...]
+
+# if env('DATABASE_TYPE') == 'sqlite':
+    
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.sqlite3',
+#             'NAME': SQLITE_DB_PATH,
+#         }
+#     }
+# elif env('DATABASE_TYPE') == 'postgresql':
+#     DATABASES = {
+#         'default': {
+#             'ENGINE': 'django.db.backends.postgresql',
+#             'NAME': env('POSTGRES_DB_NAME'),
+#             'USER': env('POSTGRES_DB_USER'),
+#             'PASSWORD': env('POSTGRES_DB_PASSWORD'),
+#             'HOST': env('POSTGRES_DB_HOST'),
+#             'PORT': env('POSTGRES_DB_PORT'),
+#         }
+#     }
+# else:
+#     raise ValueError("Unknown database type specified in DATABASE_TYPE.")
+# [...]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
