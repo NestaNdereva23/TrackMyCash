@@ -38,6 +38,10 @@ class Expenses(models.Model):
         ordering = ['-date_added']
         # indexes = [models.Index(fields=['-date_added']), ]
 
+
+    def __str__(self) -> str:
+        return self.transaction_type
+
 class Income(models.Model):
     TRANSACTION_TYPE = [
         ("Income", "Income"),
@@ -68,6 +72,9 @@ class Income(models.Model):
     class Meta:
         ordering = ['-date_added']
         # indexes = [models.Index(fields=['-date_added']), ]
+
+    def __str__(self) -> str:
+        return f'{self.transaction_type} + {self.category}'
     
 class Transfer(models.Model):
     TRANSACTION_TYPE = [
@@ -80,7 +87,7 @@ class Transfer(models.Model):
         ("Crypto", "Crypto"),
 
     ]
-    transaction_type = models.CharField(max_length=15, choices=TRANSACTION_TYPE, default="Income")
+    transaction_type = models.CharField(max_length=15, choices=TRANSACTION_TYPE, default="Transfer")
     from_account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Mpesa")
     to_account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -92,8 +99,28 @@ class Transfer(models.Model):
         ordering = ['-date_added']
         # indexes = [models.Index(fields=['-date_added']), ]
 
+    def __str__(self) -> str:
+        return {self.transaction_type}
 
 
+
+class AccountBalance(models.Model):
+    ACCOUNT_CATEGORY = [
+        ("Mpesa", "Mpesa"),
+        ("Cash", "Cash"),
+        ("Bank", "Bank"),
+        ("Crypto", "Crypto"),
+    ]
+    account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    last_updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ['account', 'user']
+
+    def __str__(self) -> str:
+        return self.account
 
 
 

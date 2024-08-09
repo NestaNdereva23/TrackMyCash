@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect,HttpResponse,get_object_or_404
 from django.db.models import Sum
 from django.contrib.auth.models import User
-from .models import Expenses, Income
+from .models import Expenses, Income, AccountBalance, Transfer
 from django.contrib.auth.decorators import login_required
 from .forms import CreateUserForm, ExpenseForm, IncomeForm, TransferForm
 from django.contrib.auth import authenticate, login, logout
@@ -10,6 +10,7 @@ from django.views.generic import UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
+from django.db import transaction
 
 
 #landingpage view
@@ -51,6 +52,19 @@ def loginPage(request):
 
     return render(request, "registration/login.html")
 
+'''
+    Initialize user balace when login for the first time
+'''
+@login_required
+def initialize_balance(user):
+    account_categories = ["Mpesa", "Cash", "Bank", "Crypto"]
+    for category in account_categories:
+        AccountBalance.objects.get_or_create(
+            user=user,
+            account=category,
+            defaults={'balance': 0}
+        )
+
 #dashboard view
 @login_required
 def dashboard(request):
@@ -58,13 +72,14 @@ def dashboard(request):
     #display added expenses return for current user
     expenses = Expenses.objects.filter(user=request.user)
     incomes = Income.objects.filter(user=request.user)
+    transfer = Transfer.objects.filter(user=request.user)
 
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
     current_balance = total_income - total_expenses
 
     #combine exenses and incomes
-    transactions = list(expenses) + list(incomes)
+    transactions = list(expenses) + list(incomes) + list(transfer)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
     return render(request, "accounts/dashboard.html",{
@@ -108,6 +123,15 @@ def addincomePage(request):
             income = form.save(commit=False)
             income.user = request.user
             income.save()
+
+            with transaction.atomic():
+                balance, created = AccountBalance.objects.get_or_create(
+                    user=request.user,
+                    account=income.account
+                )
+                balance.balance += income.amount
+                balance.save()
+
             return redirect('dashboard')
         else:
             form = IncomeForm()
@@ -116,7 +140,36 @@ def addincomePage(request):
 
 @login_required
 def transferPage(request):
-    form = TransferForm(request.POST)
+    if request.method == "POST":
+        form = TransferForm(request.POST)
+        if form.is_valid:
+            transfer = form.save(commit=False)
+            transfer.user = request.user
+            transfer.save()
+
+            with transaction.atomic():
+                # Update balance for from_account
+                from_balance, created = AccountBalance.objects.get_or_create(
+                    user=request.user,
+                    account=transfer.from_account
+                )
+                from_balance.balance -= transfer.amount
+                from_balance.save()
+
+                # Update balance for to_account
+                to_balance, created = AccountBalance.objects.get_or_create(
+                    user=request.user,
+                    account=transfer.to_account
+                )
+                to_balance.balance += transfer.amount
+                to_balance.save()
+
+            return redirect('dashboard')
+        
+    else:
+        form = TransferForm()
+    
+
 
     return render(request, "accounts/transfer.html", {"form":form}) 
 
@@ -127,6 +180,8 @@ def delete_transaction(request, pk, model_type):
         transaction = get_object_or_404(Expenses, pk=pk)
     elif model_type == 'income':
         transaction = get_object_or_404(Income, pk=pk)
+    elif model_type == 'transfer':
+        transaction = get_object_or_404(Transfer, pk=pk)
     else:
         return HttpResponse('eRROR')
     

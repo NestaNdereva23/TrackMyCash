@@ -132,7 +132,13 @@
                             {% else %}
                             <td class="text-primary"">{{transaction.transaction_type}}</td>
                             {% endif %}
+
+                            {% if transaction.transaction_type == 'Transfer' %}
+                            <td>{{ transaction.from_account}} to {{ transaction.to_account}}</td>
+                            {% else %}
                             <td>{{ transaction.account }}</td>
+                            {% endif %}
+
                             <td>{{ transaction.category }}</td>
                             <td>{{ transaction.amount|intcomma }}</td>
                             <!-- <td>{{ transaction.description }}</td> -->
@@ -151,8 +157,12 @@
                                 hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
                                 <i class="fa fa-trash" aria-hidden="true"></i></button></td>
                             {% else %}
-                             <td><a class="btn btn-secondary" href="#">edit</a></td>
-                             <td><button class="btn btn-secondary" href="#">edit</button></td>
+                             <td><a class="btn btn-secondary" href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                             <td><button class="btn btn-secondary"
+                                hx-post="{% url 'deleteTransaction' transaction.pk 'transfer' %}"
+                                hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                
+                                <i class="fa fa-trash" aria-hidden="true"></i> </button></td>
                             {% endif %}
 
                             
