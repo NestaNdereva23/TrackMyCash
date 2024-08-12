@@ -76,9 +76,10 @@ def dashboard(request):
     transfer = Transfer.objects.filter(user=request.user)
     initialbalance = AccountBalance.objects.filter(user=request.user)
 
+    total_initialbalance = initialbalance.aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
-    current_balance = total_income - total_expenses
+    current_balance = total_initialbalance + total_income - total_expenses
 
     #combine exenses and incomes
     transactions = list(expenses) + list(incomes) + list(transfer)
@@ -246,3 +247,27 @@ class AccountBalanceView(LoginRequiredMixin, FormView):
         
 
             return render(request, self.template_name, {"form":form})
+    
+
+def statistics(request):
+    expenses = Expenses.objects.filter(user=request.user)
+    incomes = Income.objects.filter(user=request.user)
+    transfer = Transfer.objects.filter(user=request.user)
+    initialbalance = AccountBalance.objects.filter(user=request.user)
+
+    total_initialbalance = initialbalance.aggregate(total=Sum('balance'))['total'] or 0
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
+    current_balance = total_initialbalance + total_income - total_expenses
+
+    #combine exenses and incomes
+    transactions = list(expenses) + list(incomes) + list(transfer)
+    transactions.sort(key=lambda x: x.date_added, reverse=True)
+
+    return render(request, "partials/statistics.html",{
+        "transactions":transactions, 
+        "total_expenses":total_expenses, 
+        "total_income":total_income,
+        "current_balance": current_balance,
+        "total_initialbalance":total_initialbalance
+        })

@@ -1,0 +1,75 @@
+{% comment %} {% extends "../base.html" %} {% endcomment %}
+{% load humanize %}
+
+{% block content %}
+
+{% include "./sidebar.html" %}
+
+<div class="container mt-5">
+    <p class="h3 m-5">Statistics</p>
+
+    <div class="row mt-2">
+        <div class="col-md-5">
+            <p class="h3 m-2">Expense vs Income</p>
+            <canvas id="chart-expense-vs-income" width="200" height="200"></canvas>
+        </div>
+        <div class="col-md-5">
+            <p class="h3 m-2">Expense vs Income vs InitialBalance</p>
+            <canvas id="chart-expense-income-balance" width="200" height="200"></canvas>
+        </div>
+    </div>
+    {% comment %} <div class="row mt-5">
+        <div class="col-md-7">
+            <canvas id="chart-expense-income-balance" width="300" height="200"></canvas>
+        </div>
+    </div> {% endcomment %}
+</div>
+
+<!-- Include Chart.js library -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctxBar = document.getElementById('chart-expense-vs-income').getContext('2d');
+    new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: ['Expenses', 'Income'],
+            datasets: [{
+                label: 'EXPENSE VS INCOME',
+                data: [{{ total_expenses }}, {{ total_income }}],
+                backgroundColor: [
+                    'rgba(242, 38, 19, 1)',
+                    'rgba(8, 128, 7, 1.0)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    const ctxPie = document.getElementById('chart-expense-income-balance').getContext('2d');
+    new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: ['Expenses', 'Income', 'Balance'],
+            datasets: [{
+                label: 'EXPENSE VS INCOME vs BALANCE',
+                data: [{{ total_expenses }}, {{ total_income }}, {{ total_initialbalance }}],
+                backgroundColor: [
+                    'rgba(242, 38, 19, 1)',
+                    'rgba(8, 128, 7, 1.0)',
+                    'rgba(249, 180, 45, 1)'
+                ],
+                borderWidth: 1
+            }]
+        }
+    });
+</script>
+
+{% endblock %}

@@ -21,5 +21,5 @@ urlpatterns = [
     path('dashboard/addtransaction/addincome/<int:pk>/', IncomeTransactionUpdateView.as_view(), name='income-edit'),
     path('dashboard/<int:pk>/delete/<str:model_type>/', views.delete_transaction, name='deleteTransaction'),
     path('dashboard/accounts/', AccountBalanceView.as_view(), name='account'),
-    # path("dashboard/test/", views.test, name="test"),
+    path("dashboard/statistics/", views.statistics, name="statistics"),
 ]
