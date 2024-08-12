@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
-from .models import Expenses, Income, Transfer
+from .models import Expenses, Income, Transfer, AccountBalance
 from django.forms import ModelForm, DateTimeInput
 import datetime
 from django.core.exceptions import ValidationError
@@ -68,5 +68,12 @@ class TransferForm(ModelForm):
             'description': forms.TextInput(attrs={'class': 'form-control equal-width'}),
             'date_added': DateTimeInput(attrs={'type': 'datetime-local', 'class': 'form-control equal-width', 'value': datetime.datetime.now().strftime("%Y-%m-%dT%H:%M")}),
         }
-        
-           
+
+class AccountBalanceForm(ModelForm):
+    class Meta:
+        model = AccountBalance
+        fields = ['account', 'balance']
+        widgets = {
+            'transaction_type': forms.Select(attrs={'class': 'form-control equal-width'},),
+            'from_account': forms.NumberInput(attrs={'class': 'form-control equal-width'}),
+            }  

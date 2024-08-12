@@ -1,6 +1,10 @@
 from django.urls import path
 from . import views
-from .views import ExpenseTransactionUpdateView, IncomeTransactionUpdateView, PasswordResetView
+from .views import \
+        ExpenseTransactionUpdateView, \
+        IncomeTransactionUpdateView, \
+        PasswordResetView, \
+        AccountBalanceView \
 
 
 urlpatterns = [
@@ -16,5 +20,6 @@ urlpatterns = [
     path('dashboard/addtransaction/<int:pk>/', ExpenseTransactionUpdateView.as_view(), name='expense-edit'),
     path('dashboard/addtransaction/addincome/<int:pk>/', IncomeTransactionUpdateView.as_view(), name='income-edit'),
     path('dashboard/<int:pk>/delete/<str:model_type>/', views.delete_transaction, name='deleteTransaction'),
+    path('dashboard/accounts/', AccountBalanceView.as_view(), name='account'),
     # path("dashboard/test/", views.test, name="test"),
 ]

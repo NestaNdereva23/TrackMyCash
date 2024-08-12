@@ -1,12 +1,13 @@
+from django.http import HttpRequest
 from django.shortcuts import render, redirect,HttpResponse,get_object_or_404
 from django.db.models import Sum
 from django.contrib.auth.models import User
 from .models import Expenses, Income, AccountBalance, Transfer
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm, ExpenseForm, IncomeForm, TransferForm
+from .forms import CreateUserForm, AccountBalanceForm,ExpenseForm, IncomeForm, TransferForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.views.generic import UpdateView
+from django.views.generic import UpdateView, FormView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
@@ -73,6 +74,7 @@ def dashboard(request):
     expenses = Expenses.objects.filter(user=request.user)
     incomes = Income.objects.filter(user=request.user)
     transfer = Transfer.objects.filter(user=request.user)
+    initialbalance = AccountBalance.objects.filter(user=request.user)
 
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
@@ -208,3 +210,39 @@ class CustomPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email.html'
     subject_template_name = 'registration/password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
+
+
+
+'''
+    The following views returns the users balance amd a
+    form to initialize or update the balance
+'''
+class AccountBalanceView(LoginRequiredMixin, FormView):
+    model = AccountBalance
+    form_class = AccountBalanceForm
+    template_name = "partials/accountbalance.html"
+    success_url = "/trackmycash/dashboard/"
+    login_url = reverse_lazy("login")
+
+    def get(self, request, *args, **kwargs):
+        form = self.get_form()
+        userbalance = AccountBalance.objects.filter(user=request.user).all()
+        return render(request, self.template_name, {"userbalance":userbalance, "form":form})
+    
+    def post(self, request, *args, **kwargs):
+            form = self.get_form()
+            if form.is_valid:
+                balance = form.save(commit=False)
+                balance.user = request.user
+
+                existing_balance = AccountBalance.objects.filter(user=request.user, account=balance.account).first()
+
+                if existing_balance:
+                    existing_balance.balance = balance.balance
+                    existing_balance.save()
+                else:
+                    balance.save()
+                return redirect(self.success_url)
+        
+
+            return render(request, self.template_name, {"form":form})
