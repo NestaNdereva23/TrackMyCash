@@ -250,24 +250,31 @@ class AccountBalanceView(LoginRequiredMixin, FormView):
     
 
 def statistics(request):
+
+    #Query and filter for thr current user
     expenses = Expenses.objects.filter(user=request.user)
     incomes = Income.objects.filter(user=request.user)
     transfer = Transfer.objects.filter(user=request.user)
     initialbalance = AccountBalance.objects.filter(user=request.user)
 
+    # Calculate total amounts
     total_initialbalance = initialbalance.aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
     current_balance = total_initialbalance + total_income - total_expenses
 
-    #combine exenses and incomes
+    # Aggregate expenses by category
+    expense_by_category = expenses.values('category').annotate(total_amount=Sum('amount'))
+
+    # Combine expenses, incomes, and transfers
     transactions = list(expenses) + list(incomes) + list(transfer)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
-    return render(request, "partials/statistics.html",{
-        "transactions":transactions, 
-        "total_expenses":total_expenses, 
-        "total_income":total_income,
+    return render(request, "partials/statistics.html", {
+        "transactions": transactions, 
+        "total_expenses": total_expenses, 
+        "total_income": total_income,
         "current_balance": current_balance,
-        "total_initialbalance":total_initialbalance
-        })
+        "total_initialbalance": total_initialbalance,
+        "expense_by_category": expense_by_category
+    })

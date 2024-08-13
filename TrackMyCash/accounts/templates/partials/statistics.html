@@ -1,75 +1,122 @@
 {% comment %} {% extends "../base.html" %} {% endcomment %}
+{% load static %}
 {% load humanize %}
+
+<style>
+.container-card {
+    position: relative;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 45px;
+    padding: 40px;
+}
+.card-title {
+    font-weight: 600;
+    color: rgb(55, 46, 46);
+    letter-spacing: -0.02em;
+    line-height: 40px;
+    font-style: normal;
+    font-size: 28px;
+    padding-bottom: 8px;
+}
+</style>
 
 {% block content %}
 
 {% include "./sidebar.html" %}
 
 <div class="container mt-5">
-    <p class="h3 m-5">Statistics</p>
+    <p class="h3">Statistics</p>
 
     <div class="row mt-2">
         <div class="col-md-5">
             <p class="h3 m-2">Expense vs Income</p>
-            <canvas id="chart-expense-vs-income" width="200" height="200"></canvas>
+            <canvas id="chart-expense-vs-income" width="100" height="100"></canvas>
         </div>
         <div class="col-md-5">
-            <p class="h3 m-2">Expense vs Income vs InitialBalance</p>
-            <canvas id="chart-expense-income-balance" width="200" height="200"></canvas>
+            <p class="h3 m-2">Expense vs Income vs Initial Balance</p>
+            <canvas id="chart-expense-income-balance" width="100" height="100"></canvas>
         </div>
     </div>
-    {% comment %} <div class="row mt-5">
+    <div class="row mt-5">
         <div class="col-md-7">
-            <canvas id="chart-expense-income-balance" width="300" height="200"></canvas>
+            <div class="card">
+                <div class="container-card bg-blue-box">
+                    <p class="card-title">Expense by Category</p>
+                    <canvas id="chart-expense" width="100" height="100"></canvas>
+                </div>
+            </div>
         </div>
-    </div> {% endcomment %}
-</div>
+    </div>
 
-<!-- Include Chart.js library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    const ctxBar = document.getElementById('chart-expense-vs-income').getContext('2d');
-    new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-            labels: ['Expenses', 'Income'],
-            datasets: [{
-                label: 'EXPENSE VS INCOME',
-                data: [{{ total_expenses }}, {{ total_income }}],
-                backgroundColor: [
-                    'rgba(242, 38, 19, 1)',
-                    'rgba(8, 128, 7, 1.0)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+    <script>
+        // Bar chart for Expense vs Income
+        const ctxBar = document.getElementById('chart-expense-vs-income').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Expenses', 'Income'],
+                datasets: [{
+                    label: 'EXPENSE VS INCOME',
+                    data: [{{ total_expenses }}, {{ total_income }}],
+                    backgroundColor: [
+                        'rgba(242, 38, 19, 1)',
+                        'rgba(8, 128, 7, 1.0)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
                 }
             }
-        }
-    });
+        });
 
-    const ctxPie = document.getElementById('chart-expense-income-balance').getContext('2d');
-    new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-            labels: ['Expenses', 'Income', 'Balance'],
+        // Doughnut chart for Expense vs Income vs Initial Balance
+        const ctxPie = document.getElementById('chart-expense-income-balance').getContext('2d');
+        new Chart(ctxPie, {
+            type: 'doughnut',
+            data: {
+                labels: ['Expenses', 'Income', 'Initial Balance'],
+                datasets: [{
+                    label: 'EXPENSE VS INCOME vs INITIAL BALANCE',
+                    data: [{{ total_expenses }}, {{ total_income }}, {{ total_initialbalance }}],
+                    backgroundColor: [
+                        'rgba(242, 38, 19, 1)',
+                        'rgba(8, 128, 7, 1.0)',
+                        'rgba(249, 180, 45, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        // Doughnut chart for Expense by Category
+        const ctxPie2 = document.getElementById('chart-expense').getContext('2d');
+        new Chart(ctxPie2, {
+            type: 'bar',
+            data: {
+            labels: [{% for expense in expense_by_category %} '{{ expense.category }}', {% endfor %}],
             datasets: [{
-                label: 'EXPENSE VS INCOME vs BALANCE',
-                data: [{{ total_expenses }}, {{ total_income }}, {{ total_initialbalance }}],
+                label: 'Expense by Category',
+                data: [{% for expense in expense_by_category %} {{ expense.total_amount }}, {% endfor %}],
                 backgroundColor: [
                     'rgba(242, 38, 19, 1)',
-                    'rgba(8, 128, 7, 1.0)',
-                    'rgba(249, 180, 45, 1)'
+                    'rgba(242, 38, 19, 1)',
+                    'rgba(249, 180, 45, 1)',
+                    'rgba(49, 180, 45, 1)',
+                    'rgba(59, 0, 145, 1)',
                 ],
                 borderWidth: 1
             }]
         }
     });
-</script>
+    </script>
 
 {% endblock %}
