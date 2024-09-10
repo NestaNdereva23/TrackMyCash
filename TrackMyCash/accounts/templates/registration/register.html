@@ -141,13 +141,26 @@ a{
 form h5{
     color: #ea1313;
 }
+.nav-links a{
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 14px 16px;
+    border-radius: 5px;
+}
+.nav-links a:hover:not(.active) {
+    background-color: #ffba65;
+}
 
     </style>
 </head>
 <body>
     <nav>
         <div class="section-tag">TrackCashApp</div><br>
-        <ul class="nav-links">           
+        <ul class="nav-links"> 
+                <a href="{% url 'landingpage' %}">Client</a></li>          
                 <li><a href="{% url 'login' %}">Login</a></li>
                 <li><a href="{% url 'register' %}">Register</a></li>
         </ul>
@@ -183,7 +196,7 @@ form h5{
         <p>Already have an account?<a href="{% url 'login' %}">login</a></p>
         <div class="social">
           <div class="go"><i class="fab fa-google"></i>  Google</div>
-          <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
+          <div class="fb"><i class="fab fa-github"></i>  Github</div>
         </div>
     </form>
 </body>

@@ -53,6 +53,19 @@ body{
     right: -30px;
     bottom: -80px;
 }
+.nav-links a{
+    color: #ffffff;
+    text-decoration: none;
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 14px 16px;
+    border-radius: 5px;
+}
+.nav-links a:hover:not(.active) {
+    background-color: #ffba65;
+}
+
 form{
     height: 600px;
     width: 400px;
@@ -182,7 +195,7 @@ a{
         <input type="hidden" name="next" value="{{next}}">
         <div class="social">
           <div class="go"><i class="fab fa-google"></i>  Google</div>
-          <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>
+          <div class="fb"><i class="fab fa-github"></i>  Github</div>
         </div>
         <p>Don't have an account yet?<a href="{% url 'register' %}">Create a new account</a></p>
     </form>
