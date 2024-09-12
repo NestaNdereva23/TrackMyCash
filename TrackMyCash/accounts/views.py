@@ -213,7 +213,6 @@ class CustomPasswordResetView(PasswordResetView):
     success_url = reverse_lazy('password_reset_done')
 
 
-
 '''
     The following views returns the users balance amd a
     form to initialize or update the balance
@@ -222,8 +221,8 @@ class AccountBalanceView(LoginRequiredMixin, FormView):
     model = AccountBalance
     form_class = AccountBalanceForm
     template_name = "partials/accountbalance.html"
-    success_url = "/trackmycash/dashboard/"
-    login_url = reverse_lazy("login")
+    # success_url = ""
+    # login_url = reverse_lazy("login")
 
     def get(self, request, *args, **kwargs):
         form = self.get_form()
@@ -243,7 +242,7 @@ class AccountBalanceView(LoginRequiredMixin, FormView):
                     existing_balance.save()
                 else:
                     balance.save()
-                return redirect(self.success_url)
+                return redirect('account')
         
 
             return render(request, self.template_name, {"form":form})

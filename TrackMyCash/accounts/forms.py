@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm , PasswordResetForm
 from django.contrib.auth.models import User
 from .models import Expenses, Income, Transfer, AccountBalance
 from django.forms import ModelForm, DateTimeInput
@@ -77,3 +77,10 @@ class AccountBalanceForm(ModelForm):
             'transaction_type': forms.Select(attrs={'class': 'form-control equal-width'},),
             'from_account': forms.NumberInput(attrs={'class': 'form-control equal-width'}),
             }  
+        
+# class UserForgotPasswordForm(PasswordResetForm):
+#     email = forms.EmailField(required=True, max_length=255)
+
+#     class Meta:
+#         model = User
+#         fields = ['email']
