@@ -3,28 +3,41 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 
+ACCOUNT_CATEGORY = [
+        ("Mpesa", "Mpesa"),
+        ("AirtelMoney", "AirtelMoney"),
+        ("Cash", "Cash"),
+        ("Bank", "Bank"),
+        ("CryptoWallet", "CryptoWallet"),
+        ("Savings", "Savings"),
+        ("MoneyMarketFund", "MoneyMarketFund"),
+        ("PayPal", "PayPal"),
+        ("Other", "Other")
+
+]
+
+
 class Expenses(models.Model):
     EXPENSE_CATEGORY = [
-        ("Car", "Car"),
-        ("Bills", "Bills"),
+        ("CarBills", "CarBills"),
+        ("Subscriptions", "Subscriptions"),
+        ("Bills/Utilities", "Bills/Utilities"),
+        ("Morgage/Rent", "Morgage/Rent"),
         ("Education", "Education"),
-        ("Health", "Health"),
+        ("MedicalCare", "MedicalCare"),
+        ("LoanPayments", "LoanPayments"),
         ("Shopping", "Shopping"),
         ("Transport", "Transport"),
         ("WiFi", "WiFi"),
+        ("Clothing", "Clothing"),
+        ("Others", "Others"),
+
     ]
 
     TRANSACTION_TYPE = [
         ("Expense", "Expense"),
     ]
 
-    ACCOUNT_CATEGORY = [
-        ("Mpesa", "Mpesa"),
-        ("Cash", "Cash"),
-        ("Bank", "Bank"),
-        ("Crypto", "Crypto"),
-
-    ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     transaction_type = models.CharField(max_length=15, choices=TRANSACTION_TYPE, default="Expense", )
     account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
@@ -48,23 +61,19 @@ class Income(models.Model):
     ]
     INCOME_CATEGORY = [
         ("Salary", "Salary"),
-        ("PocketMoney", "PocketMoney"),
+        ("PocketMoney/Allowance", "PocketMoney/Allowance"),
         ("Investments", "Investments"),
         ("Lotery", "Lotery"),
         ("Grants", "Grants"),
         ("Gifts", "Gifts"),
-    ]
-    ACCOUNT_CATEGORY = [
-        ("Mpesa", "Mpesa"),
-        ("Cash", "Cash"),
-        ("Bank", "Bank"),
-        ("Crypto", "Crypto"),
+        ("RentalIncome", "RentalIncome"),
 
     ]
+
     transaction_type = models.CharField(max_length=15, choices=TRANSACTION_TYPE, default="Income")
     account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    category = models.CharField(max_length=15, choices=INCOME_CATEGORY, default="Salary")
+    category = models.CharField(max_length=30, choices=INCOME_CATEGORY, default="Salary")
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     description = models.CharField(max_length=1000, blank=True, null=True)
     date_added = models.DateTimeField(default=timezone.now)
@@ -105,12 +114,12 @@ class Transfer(models.Model):
 
 
 class AccountBalance(models.Model):
-    ACCOUNT_CATEGORY = [
-        ("Mpesa", "Mpesa"),
-        ("Cash", "Cash"),
-        ("Bank", "Bank"),
-        ("Crypto", "Crypto"),
-    ]
+    # ACCOUNT_CATEGORY = [
+    #     ("Mpesa", "Mpesa"),
+    #     ("Cash", "Cash"),
+    #     ("Bank", "Bank"),
+    #     ("Crypto", "Crypto"),
+    # ]
     account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
