@@ -76,7 +76,7 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Current Balance</span>
-                            <span class="amount--value">{{current_balance|intcomma}}</span>
+                            <span class="amount--value">Ksh.{{current_balance|intcomma}}</span>
                         </div>
                         <i class="fa-solid fa-wallet" id="icon"></i>
                     </div>
@@ -85,8 +85,7 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Expenses</span>
-                            <span class="amount--value">
-                                <p>{{ total_expenses|intcomma }}</p>
+                            <span class="amount--value">{{ total_expenses|intcomma }}
                             </span>
                         </div>
                         <i class="fa-solid fa-file-invoice-dollar"></i>
@@ -96,7 +95,7 @@
                     <div class="card--header">
                         <div class="amount">
                             <span class="title">Income</span>
-                            <span class="amount--value">{{ total_income|intcomma }}</span>
+                            <span class="amount--value">Ksh.{{ total_income|intcomma }}</span>
                         </div>
                         <i class="fa-solid fa-sack-dollar"></i>
                     </div>

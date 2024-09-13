@@ -89,13 +89,6 @@ class Transfer(models.Model):
     TRANSACTION_TYPE = [
         ("Transfer", "Transfer"),
     ]
-    ACCOUNT_CATEGORY = [
-        ("Mpesa", "Mpesa"),
-        ("Cash", "Cash"),
-        ("Bank", "Bank"),
-        ("Crypto", "Crypto"),
-
-    ]
     transaction_type = models.CharField(max_length=15, choices=TRANSACTION_TYPE, default="Transfer")
     from_account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Mpesa")
     to_account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
@@ -114,12 +107,6 @@ class Transfer(models.Model):
 
 
 class AccountBalance(models.Model):
-    # ACCOUNT_CATEGORY = [
-    #     ("Mpesa", "Mpesa"),
-    #     ("Cash", "Cash"),
-    #     ("Bank", "Bank"),
-    #     ("Crypto", "Crypto"),
-    # ]
     account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -131,7 +118,10 @@ class AccountBalance(models.Model):
     def __str__(self) -> str:
         return self.account
 
-
+class UserProfile(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    startingbalance = models.DecimalField(max_digits=90, decimal_places=2, default=0)
+    denomination = models.CharField(max_length=255)
 
 
 

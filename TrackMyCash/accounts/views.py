@@ -277,3 +277,6 @@ def statistics(request):
         "total_initialbalance": total_initialbalance,
         "expense_by_category": expense_by_category
     })
+
+# def profile(request):
+    
