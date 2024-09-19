@@ -78,9 +78,8 @@ class AccountBalanceForm(ModelForm):
             'from_account': forms.NumberInput(attrs={'class': 'form-control equal-width'}),
             }  
         
-# class UserForgotPasswordForm(PasswordResetForm):
-#     email = forms.EmailField(required=True, max_length=255)
+class UserProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name']
 
-#     class Meta:
-#         model = User
-#         fields = ['email']

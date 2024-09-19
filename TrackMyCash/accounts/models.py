@@ -16,7 +16,6 @@ ACCOUNT_CATEGORY = [
 
 ]
 
-
 class Expenses(models.Model):
     EXPENSE_CATEGORY = [
         ("CarBills", "CarBills"),

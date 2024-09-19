@@ -4,7 +4,8 @@ from django.db.models import Sum
 from django.contrib.auth.models import User
 from .models import Expenses, Income, AccountBalance, Transfer
 from django.contrib.auth.decorators import login_required
-from .forms import CreateUserForm, AccountBalanceForm,ExpenseForm, IncomeForm, TransferForm
+from .forms import CreateUserForm, AccountBalanceForm,ExpenseForm, \
+    IncomeForm, TransferForm, UserProfileUpdateForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.views.generic import UpdateView, FormView, View
@@ -278,5 +279,14 @@ def statistics(request):
         "expense_by_category": expense_by_category
     })
 
-# def profile(request):
-    
+@login_required
+def profile(request):
+    if request.method == "POST":
+        form = UserProfileUpdateForm(data=request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = UserProfileUpdateForm(instance=request.user)
+
+    return render(request, "partials/profile.html", {"form": form})

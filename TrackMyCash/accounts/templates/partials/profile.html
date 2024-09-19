@@ -1,0 +1,68 @@
+
+{% block content %}
+{% include "./sidebar.html" %}
+
+    <div class="main--content">
+        <div class="header--wrapper">
+            <div class="header--title">
+                
+                <h2>Profile</h2>
+            </div>
+            <div class="user--info">
+                <span>Welcome, {{ user.username }}</span>
+                <img src=
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR866XyS0-IpBpUrxAzWsdgHOgSBeHGl-GKeQ&s" 
+                alt="">
+            </div>
+        </div>
+        <div class="card--container">
+            <h2 class="main--title">Profile Information</h2>
+            <div class="card--wrapper2">
+                <h6>
+                    <p>Username:        {{ user.username }}</p>
+                    <p>Email:       {{ user.email }}</p>
+                    <p>Firstname:       {{ request.user.first_name }}</p>
+                    <p>Lastname:        <span>{{ request.user.last_name }}</span></p>  
+                </h6><br>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updt-modal" >Update Profile</button>                  
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="updt-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Update Profile</h5>
+                    <button type="button" class="btn-close" data-be-dismiss="modal" aria-label="close">     
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3 form-control" method="post">
+                        <!-- {{ form.as_p }} -->
+                          {% csrf_token %}
+                        <div class="col-auto form-control"> 
+                        {{form.username}}
+                        </div>
+                        <div class="col-auto form-control">
+                          {{form.email}}
+                        </div>
+                        <div class="col-auto form-control">
+                          {{form.first_name}}
+                        </div>
+                        <div class="col-auto form-control">
+                            {{form.last_name}}
+                          </div>
+                        <div class="col-auto">
+                          <button type="submit" class="btn btn-primary mb-3">Update Profile</button>
+                        </div>
+                        
+                      </form>
+
+                </div>
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

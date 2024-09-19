@@ -200,7 +200,7 @@ nav{
     top: 0;
     left: 0;
     bottom: 0;
-    width: 150px;
+    width: 120px;
     height: 100vh;
     padding: 0 1.7rem;
     color: #f9f9f9;
@@ -320,6 +320,12 @@ nav{
     flex-wrap: wrap;
     gap: 1rem;
 }
+/* profilepage */
+.card--wrapper2{
+    display: block;
+    gap: 1rem;
+}
+
 .main--title{
     color: #2e384f;
     padding-bottom: 10px;
@@ -476,5 +482,9 @@ tfoot td{
 } */
 
 .btnreset{
+    color: green;
+}
+
+.updtprofbtn{
     color: green;
 }
