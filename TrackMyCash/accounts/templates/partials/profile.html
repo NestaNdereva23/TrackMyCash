@@ -15,6 +15,9 @@
                 alt="">
             </div>
         </div>
+        {% for message in messages %}
+            <h4>{{message}}</h4>
+        {% endfor %}
         <div class="card--container">
             <h2 class="main--title">Profile Information</h2>
             <div class="card--wrapper2">

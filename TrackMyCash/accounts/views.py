@@ -284,75 +284,61 @@ def statistics(request):
         "expense_by_category": expense_by_category
     })
 
+
 @login_required
 def profile(request):
+    # Get user instance
+    user = request.user
 
-    formA = UserProfileUpdateForm(instance=request.user)
-    formB = AccountBalanceForm()
+    # Get existing AccountBalance for the user, if any
+    account_balance = AccountBalance.objects.filter(user=user).first()
+
+    # Initialize both forms (UserProfile and AccountBalance)
+    formA = UserProfileUpdateForm(instance=user)
+    formB = AccountBalanceForm(instance=account_balance)  # Load existing balance if available
 
     if request.method == "POST":
         if 'formA_submit' in request.POST:
-            formA = UserProfileUpdateForm(data=request.POST, instance=request.user)
-            formB = AccountBalanceForm()
+            # Update user profile data
+            formA = UserProfileUpdateForm(data=request.POST, instance=user)
             if formA.is_valid():
                 formA.save()
                 return redirect('profile')
-            
+
         elif 'formB_submit' in request.POST:
-            formA = UserProfileUpdateForm(instance=request.user)
-            formB = AccountBalanceForm(instance=request.user)
+            # Update AccountBalance data
+            formB = AccountBalanceForm(data=request.POST, instance=account_balance)
 
             if formB.is_valid():
+                # Save form but don't commit to database yet
                 startingbalance = formB.save(commit=False)
-                startingbalance.user = request.user
-                startingbalance.save()
-                return redirect ('account')
+                startingbalance.user = user
 
-    else:
-        formA = UserProfileUpdateForm(instance=request.user)
-        formB = AccountBalanceForm(instance=request.user)
+                # Check for existing starting balance for the account
+                existing_sb = AccountBalance.objects.filter(user=user, account=startingbalance.account).first()
+                
+                if existing_sb:
+                    # Update the existing starting balance
+                    existing_sb.startingbalance = startingbalance.startingbalance
+                    existing_sb.save()
+                else:
+                    # Save new account balance entry
+                    startingbalance.save()
 
-    startingbalanc =  AccountBalance.objects.filter(user=request.user)
+                # Redirect to 'account' page after updating balance
+                return redirect('account')
     
+    else:
+        formA = UserProfileUpdateForm(instance=user)
+        formB = AccountBalanceForm(instance=account_balance)  # Reinitialize with existing balance
+
+    # Aggregate the total starting balance for the user
+    startingbalanc = AccountBalance.objects.filter(user=user)
     total_startingbalance = startingbalanc.aggregate(total=Sum('startingbalance'))['total'] or 0
 
-    return render(request, "partials/profile.html", {"formA": formA, "formB":formB, 'startingb':total_startingbalance})
-
-
-
-
-
-
-
-#Updates user profile information e.g username,firstname,lastname
-# @login_required
-# def profile(request):
-#     if request.method == "POST":
-#         form = UserProfileUpdateForm(data=request.POST, instance=request.user)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('profile')
-            
-#     else:
-#         form = UserProfileUpdateForm(instance=request.user)
-
-#     return render(request, "partials/profile.html", {"form": form})
-
-''' Starting balance update i.e the users current money they have on their account
-    before any expense/income records are recorded
-'''
-# @login_required
-# def startingbalanceupdate(request):
-#     form = AccountBalanceForm(request.POST)
-
-#     if request.method == 'POST':
-#         form = AccountBalanceForm(request.POST)
-#         if form.is_valid():
-#             startingbalance = form.save(commit=False)
-#             startingbalance.user = request.user
-#             startingbalance.save()
-#             return redirect ('accounts')
-#     else:
-#         form = AccountBalanceForm(request.POST)
-
-#     return render(request, "partials/profile.html", {"form2": form})
+    # Render the profile page with both forms
+    return render(request, "partials/profile.html", {
+        "formA": formA,
+        "formB": formB,
+        'startingb': total_startingbalance,
+    })
