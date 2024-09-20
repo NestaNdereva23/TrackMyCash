@@ -72,11 +72,11 @@ class TransferForm(ModelForm):
 class AccountBalanceForm(ModelForm):
     class Meta:
         model = AccountBalance
-        fields = ['account', 'balance']
-        widgets = {
-            'transaction_type': forms.Select(attrs={'class': 'form-control equal-width'},),
-            'from_account': forms.NumberInput(attrs={'class': 'form-control equal-width'}),
-            }  
+        fields = ['account', 'startingbalance']
+        # widgets = {
+        #     'transaction_type': forms.Select(attrs={'class': 'form-control equal-width'},),
+        #     'from_account': forms.NumberInput(attrs={'class': 'form-control equal-width'}),
+        #     }  
         
 class UserProfileUpdateForm(forms.ModelForm):
     class Meta:

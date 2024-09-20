@@ -27,39 +27,72 @@
                 <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updt-modal" >Update Profile</button>                  
             </div>
         </div>
+        <div class="card--container mt-2">
+            <h3 class="main--title">Starting Balance</h3>
+            <div class="card--wrapper2">
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#updt-balance">Update Starting Balance</button> 
+            
+                <p>{{startingb}}</p>
+    
+            </div>
+        </div>
     </div>
+
+    <!-- modal section -->
     <div class="modal fade" id="updt-modal" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modal-title">Update Profile</h5>
-                    <button type="button" class="btn-close" data-be-dismiss="modal" aria-label="close">     
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close">     
                     </button>
                 </div>
                 <div class="modal-body">
                     <form class="row g-3 form-control" method="post">
-                        <!-- {{ form.as_p }} -->
                           {% csrf_token %}
                         <div class="col-auto form-control"> 
-                        {{form.username}}
+                        {{formA.username}}
                         </div>
                         <div class="col-auto form-control">
-                          {{form.email}}
+                          {{formA.email}}
                         </div>
                         <div class="col-auto form-control">
-                          {{form.first_name}}
+                          {{formA.first_name}}
                         </div>
                         <div class="col-auto form-control">
-                            {{form.last_name}}
+                            {{formA.last_name}}
                           </div>
                         <div class="col-auto">
-                          <button type="submit" class="btn btn-primary mb-3">Update Profile</button>
+                          <button type="submit" class="btn btn-success mb-3" name="formA_submit">Update Profile</button>
                         </div>
                         
                       </form>
 
                 </div>
-                <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="updt-balance" tabindex="-1" aria-labelledby="modal-title" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Update Starting Balance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="close">     
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="row g-3 form-control" method="post">
+                        {% csrf_token %}
+                        <div class="col-auto form-control"> 
+                        {{formB.account}}
+                        </div>
+                        <div class="col-auto form-control">
+                        {{formB.startingbalance}}
+                        </div>
+                        <div class="col-auto">
+                          <button type="submit" class="btn btn-warning mb-3" name="formB_submit">Update Account Balance</button>
+                        </div>    
+                    </form>
 
                 </div>
             </div>

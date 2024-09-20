@@ -76,16 +76,21 @@ def dashboard(request):
     incomes = Income.objects.filter(user=request.user)
     transfer = Transfer.objects.filter(user=request.user)
     initialbalance = AccountBalance.objects.filter(user=request.user)
-
+    startingbalanc =  AccountBalance.objects.filter(user=request.user)
+    
+    total_startingbalance = startingbalanc.aggregate(total=Sum('startingbalance'))['total'] or 0
     total_initialbalance = initialbalance.aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
-    current_balance = total_initialbalance + total_income - total_expenses
+    current_balance = total_startingbalance + total_initialbalance + total_income - total_expenses
 
     #combine exenses and incomes
     transactions = list(expenses) + list(incomes) + list(transfer)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
+    if total_startingbalance == 0:
+        return redirect('profile')
+  
     return render(request, "accounts/dashboard.html",{
         "transactions":transactions, 
         "total_expenses":total_expenses, 
@@ -281,12 +286,73 @@ def statistics(request):
 
 @login_required
 def profile(request):
-    if request.method == "POST":
-        form = UserProfileUpdateForm(data=request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('profile')
-    else:
-        form = UserProfileUpdateForm(instance=request.user)
 
-    return render(request, "partials/profile.html", {"form": form})
+    formA = UserProfileUpdateForm(instance=request.user)
+    formB = AccountBalanceForm()
+
+    if request.method == "POST":
+        if 'formA_submit' in request.POST:
+            formA = UserProfileUpdateForm(data=request.POST, instance=request.user)
+            formB = AccountBalanceForm()
+            if formA.is_valid():
+                formA.save()
+                return redirect('profile')
+            
+        elif 'formB_submit' in request.POST:
+            formA = UserProfileUpdateForm(instance=request.user)
+            formB = AccountBalanceForm(instance=request.user)
+
+            if formB.is_valid():
+                startingbalance = formB.save(commit=False)
+                startingbalance.user = request.user
+                startingbalance.save()
+                return redirect ('account')
+
+    else:
+        formA = UserProfileUpdateForm(instance=request.user)
+        formB = AccountBalanceForm(instance=request.user)
+
+    startingbalanc =  AccountBalance.objects.filter(user=request.user)
+    
+    total_startingbalance = startingbalanc.aggregate(total=Sum('startingbalance'))['total'] or 0
+
+    return render(request, "partials/profile.html", {"formA": formA, "formB":formB, 'startingb':total_startingbalance})
+
+
+
+
+
+
+
+#Updates user profile information e.g username,firstname,lastname
+# @login_required
+# def profile(request):
+#     if request.method == "POST":
+#         form = UserProfileUpdateForm(data=request.POST, instance=request.user)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('profile')
+            
+#     else:
+#         form = UserProfileUpdateForm(instance=request.user)
+
+#     return render(request, "partials/profile.html", {"form": form})
+
+''' Starting balance update i.e the users current money they have on their account
+    before any expense/income records are recorded
+'''
+# @login_required
+# def startingbalanceupdate(request):
+#     form = AccountBalanceForm(request.POST)
+
+#     if request.method == 'POST':
+#         form = AccountBalanceForm(request.POST)
+#         if form.is_valid():
+#             startingbalance = form.save(commit=False)
+#             startingbalance.user = request.user
+#             startingbalance.save()
+#             return redirect ('accounts')
+#     else:
+#         form = AccountBalanceForm(request.POST)
+
+#     return render(request, "partials/profile.html", {"form2": form})

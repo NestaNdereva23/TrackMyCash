@@ -108,6 +108,7 @@ class Transfer(models.Model):
 class AccountBalance(models.Model):
     account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    startingbalance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     last_updated = models.DateTimeField(auto_now=True)
 
@@ -117,10 +118,10 @@ class AccountBalance(models.Model):
     def __str__(self) -> str:
         return self.account
 
-class UserProfile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-    startingbalance = models.DecimalField(max_digits=90, decimal_places=2, default=0)
-    denomination = models.CharField(max_length=255)
+# class UserProfile(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+#     startingbalance = models.DecimalField(max_digits=90, decimal_places=2, default=0)
+#     denomination = models.CharField(max_length=255)
 
 
 

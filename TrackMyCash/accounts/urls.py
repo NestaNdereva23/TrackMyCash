@@ -27,6 +27,7 @@ urlpatterns = [
     path('dashboard/accounts/', AccountBalanceView.as_view(), name='account'),
     path("dashboard/statistics/", views.statistics, name="statistics"),
     path("dashboard/profile/", views.profile, name="profile"),
+    # path("dashboard/profile/", views.startingbalanceupdate, name="startingbalance"),
 
 
     path('login/password_reset/', auth_views.PasswordResetView.as_view(template_name="registration/password_reset_form.html"), name="password_reset"),
