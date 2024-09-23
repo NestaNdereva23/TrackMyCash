@@ -82,10 +82,10 @@ def dashboard(request):
     total_initialbalance = initialbalance.aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
-    current_balance = total_startingbalance + total_initialbalance + total_income - total_expenses
+    current_balance = total_startingbalance  + total_income - total_expenses
 
     #combine exenses and incomes
-    transactions = list(expenses) + list(incomes) + list(transfer)
+    transactions = list(expenses) + list(incomes) + list(transfer) +list(startingbalanc)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
     if total_startingbalance == 0:
@@ -220,8 +220,8 @@ class CustomPasswordResetView(PasswordResetView):
 
 
 '''
-    The following views returns the users balance amd a
-    form to initialize or update the balance
+    The following views returns the users balance
+    
 '''
 class AccountBalanceView(LoginRequiredMixin, FormView):
     model = AccountBalance
@@ -235,25 +235,6 @@ class AccountBalanceView(LoginRequiredMixin, FormView):
         userbalance = AccountBalance.objects.filter(user=request.user).all()
         return render(request, self.template_name, {"userbalance":userbalance, "form":form})
     
-    def post(self, request, *args, **kwargs):
-            form = self.get_form()
-            if form.is_valid:
-                balance = form.save(commit=False)
-                balance.user = request.user
-
-                existing_balance = AccountBalance.objects.filter(user=request.user, account=balance.account).first()
-
-                if existing_balance:
-                    existing_balance.balance = balance.balance
-                    existing_balance.save()
-                else:
-                    balance.save()
-                return redirect('account')
-        
-
-            return render(request, self.template_name, {"form":form})
-    
-
 def statistics(request):
 
     #Query and filter for thr current user

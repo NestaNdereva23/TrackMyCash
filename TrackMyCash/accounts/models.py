@@ -111,6 +111,7 @@ class AccountBalance(models.Model):
     startingbalance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     last_updated = models.DateTimeField(auto_now=True)
+    date_added = models.DateTimeField(default=timezone.now)
 
     class Meta:
         unique_together = ['account', 'user']
