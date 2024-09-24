@@ -157,9 +157,8 @@ def addincomePage(request):
 
 @login_required
 def transferPage(request):
-    if request.method == "POST":
-        form = TransferForm(request.POST)
-        if form.is_valid():
+    form = TransferForm(request.POST or None)
+    if request.method == "POST" and form.is_valid():
             transfer = form.save(commit=False)
             transfer.user = request.user
             transfer.save()
@@ -218,18 +217,21 @@ def delete_transaction(request, pk, model_type):
     elif model_type == 'transfer':
         transaction = get_object_or_404(Transfer, pk=pk)
 
-        from_account = AccountBalance.objects.get(user=request.user, account=transaction.from_account)
-        to_account = AccountBalance.objects.get(user=request.user, account=transaction.to_account)
 
-        from_account.balance += transaction.amount
-        to_account.balance -= transaction.amount
+        source_account = AccountBalance.objects.get(user=request.user, account=transaction.from_account)
+        destination_account = AccountBalance.objects.get(user=request.user, account=transaction.to_account)
 
-        from_account.save()
-        to_account.save()
+        source_account.balance += transaction.amount
+        destination_account.balance -= transaction.amount
+
+        source_account.save()
+        destination_account.save()
+
     else:
         return HttpResponse('Error: Invalid transaction type')
     
     transaction.delete()
+
     return HttpResponse("")
 
 

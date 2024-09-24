@@ -148,12 +148,14 @@
                                 hx-post="{% url 'deleteTransaction' transaction.pk 'income' %}"
                                 hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
                                 <i class="fa fa-trash" aria-hidden="true"></i></button></td>
+
                             {% elif transaction.transaction_type == 'Expense' %}
                              <td><a class="btn btn-danger" href="{% url 'expense-edit' transaction.pk %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
                              <td><button class="btn btn-danger" 
                                 hx-post="{% url 'deleteTransaction' transaction.pk 'expense' %}"
                                 hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
                                 <i class="fa fa-trash" aria-hidden="true"></i></button></td>
+                                
                             {% else %}
                              <td><a class="btn btn-secondary" href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
                              <td><button class="btn btn-secondary"
