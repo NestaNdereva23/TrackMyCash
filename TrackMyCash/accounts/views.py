@@ -13,6 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
 from django.db import transaction
+from django.core.exceptions import ValidationError
 
 
 #landingpage view
@@ -75,17 +76,16 @@ def dashboard(request):
     expenses = Expenses.objects.filter(user=request.user)
     incomes = Income.objects.filter(user=request.user)
     transfer = Transfer.objects.filter(user=request.user)
-    initialbalance = AccountBalance.objects.filter(user=request.user)
     startingbalanc =  AccountBalance.objects.filter(user=request.user)
     
     total_startingbalance = startingbalanc.aggregate(total=Sum('startingbalance'))['total'] or 0
-    total_initialbalance = initialbalance.aggregate(total=Sum('balance'))['total'] or 0
+    balance = AccountBalance.objects.filter(user=request.user).aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
-    current_balance = total_startingbalance  + total_income - total_expenses
+    current_balance = balance - total_expenses
 
     #combine exenses and incomes
-    transactions = list(expenses) + list(incomes) + list(transfer) +list(startingbalanc)
+    transactions = list(expenses) + list(incomes) + list(transfer)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
     if total_startingbalance == 0:
@@ -115,6 +115,15 @@ def addtransactionPage(request):
             expense = form.save(commit=False)
             expense.user = request.user
             expense.save()
+
+            with transaction.atomic():
+                balance, created = AccountBalance.objects.get_or_create(
+                    user=request.user,
+                    account=expense.account
+                )
+                balance.balance -= expense.amount
+                balance.save()
+                
             return redirect('dashboard')        
     else:
          form = ExpenseForm()   
@@ -124,16 +133,15 @@ def addtransactionPage(request):
 #add income view
 @login_required
 def addincomePage(request):
-    form = IncomeForm(request.POST)
+    form = IncomeForm(request.POST or None)
 
-    if request.method == "POST":
-        form = IncomeForm(request.POST)
-        if form.is_valid():
+    if request.method == "POST" and form.is_valid():
             income = form.save(commit=False)
             income.user = request.user
             income.save()
 
             with transaction.atomic():
+                
                 balance, created = AccountBalance.objects.get_or_create(
                     user=request.user,
                     account=income.account
@@ -142,7 +150,7 @@ def addincomePage(request):
                 balance.save()
 
             return redirect('dashboard')
-        else:
+    else:
             form = IncomeForm()
 
     return render(request, "accounts/addincome.html", {"form":form})   
@@ -151,7 +159,7 @@ def addincomePage(request):
 def transferPage(request):
     if request.method == "POST":
         form = TransferForm(request.POST)
-        if form.is_valid:
+        if form.is_valid():
             transfer = form.save(commit=False)
             transfer.user = request.user
             transfer.save()
@@ -161,7 +169,12 @@ def transferPage(request):
                 from_balance, created = AccountBalance.objects.get_or_create(
                     user=request.user,
                     account=transfer.from_account
-                )
+                    )
+                # Check if the balance is sufficient for the transfer
+                if from_balance.balance < transfer.amount:
+                    form.add_error(None, ValidationError('Insufficient balance for transfer from {}.'.format(transfer.from_account)))
+                    return redirect('transfer')
+
                 from_balance.balance -= transfer.amount
                 from_balance.save()
 
@@ -217,43 +230,23 @@ class CustomPasswordResetView(PasswordResetView):
     email_template_name = 'registration/password_reset_email.html'
     subject_template_name = 'registration/password_reset_subject.txt'
     success_url = reverse_lazy('password_reset_done')
-
-
-'''
-    The following views returns the users balance
-    
-'''
-class AccountBalanceView(LoginRequiredMixin, FormView):
-    model = AccountBalance
-    form_class = AccountBalanceForm
-    template_name = "partials/accountbalance.html"
-    # success_url = ""
-    # login_url = reverse_lazy("login")
-
-    def get(self, request, *args, **kwargs):
-        form = self.get_form()
-        userbalance = AccountBalance.objects.filter(user=request.user).all()
-        return render(request, self.template_name, {"userbalance":userbalance, "form":form})
-    
+  
 def statistics(request):
-
-    #Query and filter for thr current user
     expenses = Expenses.objects.filter(user=request.user)
     incomes = Income.objects.filter(user=request.user)
-    transfer = Transfer.objects.filter(user=request.user)
-    initialbalance = AccountBalance.objects.filter(user=request.user)
+    transfers = Transfer.objects.filter(user=request.user)
+    account_balances = AccountBalance.objects.filter(user=request.user)
 
-    # Calculate total amounts
-    total_initialbalance = initialbalance.aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
-    current_balance = total_initialbalance + total_income - total_expenses
+    
+    # Assuming AccountBalance now has 'startingbalance' and 'balance' fields
+    total_starting_balance = account_balances.aggregate(total=Sum('startingbalance'))['total'] or 0
+    current_balance = account_balances.aggregate(total=Sum('balance'))['total'] or 0
 
-    # Aggregate expenses by category
     expense_by_category = expenses.values('category').annotate(total_amount=Sum('amount'))
 
-    # Combine expenses, incomes, and transfers
-    transactions = list(expenses) + list(incomes) + list(transfer)
+    transactions = list(expenses) + list(incomes) + list(transfers)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
     return render(request, "partials/statistics.html", {
@@ -261,8 +254,9 @@ def statistics(request):
         "total_expenses": total_expenses, 
         "total_income": total_income,
         "current_balance": current_balance,
-        "total_initialbalance": total_initialbalance,
-        "expense_by_category": expense_by_category
+        "total_starting_balance": total_starting_balance,
+        "expense_by_category": expense_by_category,
+        "account_balances": account_balances,
     })
 
 
@@ -292,30 +286,36 @@ def profile(request):
 
             if formB.is_valid():
                 # Save form but don't commit to database yet
-                startingbalance = formB.save(commit=False)
-                startingbalance.user = user
+                account_balance = formB.save(commit=False)
+                account_balance.user = user
 
-                # Check for existing starting balance for the account
-                existing_sb = AccountBalance.objects.filter(user=user, account=startingbalance.account).first()
+                # Check for existing AccountBalance for the user
+                existing_account_balance = AccountBalance.objects.filter(user=user, account=account_balance.account).first()
                 
-                if existing_sb:
-                    # Update the existing starting balance
-                    existing_sb.startingbalance = startingbalance.startingbalance
-                    existing_sb.save()
-                else:
-                    # Save new account balance entry
-                    startingbalance.save()
+                if existing_account_balance:
+                    # Update the starting balance, but leave the current balance intact
+                    if existing_account_balance.startingbalance != account_balance.startingbalance:
+                        # Adjust balance only if starting balance is different
+                        starting_balance_diff = account_balance.startingbalance - existing_account_balance.startingbalance
+                        existing_account_balance.balance += starting_balance_diff
+                    existing_account_balance.startingbalance = account_balance.startingbalance
+                    existing_account_balance.save()
 
-                # Redirect to 'account' page after updating balance
-                return redirect('account')
+                else:
+                    # Set the balance equal to the starting balance for the first time
+                    account_balance.balance = account_balance.startingbalance
+                    account_balance.save()
+
+                # Redirect to 'dashboard' after updating balance
+                return redirect('dashboard')
     
     else:
         formA = UserProfileUpdateForm(instance=user)
         formB = AccountBalanceForm(instance=account_balance)  # Reinitialize with existing balance
 
     # Aggregate the total starting balance for the user
-    startingbalanc = AccountBalance.objects.filter(user=user)
-    total_startingbalance = startingbalanc.aggregate(total=Sum('startingbalance'))['total'] or 0
+    startingbalance_query = AccountBalance.objects.filter(user=user)
+    total_startingbalance = startingbalance_query.aggregate(total=Sum('startingbalance'))['total'] or 0
 
     # Render the profile page with both forms
     return render(request, "partials/profile.html", {

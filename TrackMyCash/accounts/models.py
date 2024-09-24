@@ -118,15 +118,13 @@ class AccountBalance(models.Model):
 
     def __str__(self) -> str:
         return self.account
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
 
-# class UserProfile(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
-#     startingbalance = models.DecimalField(max_digits=90, decimal_places=2, default=0)
-#     denomination = models.CharField(max_length=255)
-
-
-
-
+    def update_balance(self, amount):
+        self.balance += amount
+        self.save()
 
 
 

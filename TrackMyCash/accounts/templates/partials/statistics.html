@@ -1,32 +1,20 @@
-{% comment %} {% extends "../base.html" %} {% endcomment %}
+
 {% load static %}
 {% load humanize %}
 
 <style>
-.container-card {
-    position: relative;
-    border: 2px solid transparent;
-    background-clip: padding-box;
-    border-radius: 12px;
-    padding: 40px;
-    box-shadow: 0 0 25px 10px rgba(0, 0,0, 0.25);
-    /* background-color: bisque; */
-}
 .card-title {
     font-weight: 600;
     color: rgb(55, 46, 46);
     letter-spacing: -0.02em;
     line-height: 40px;
-    font-style: normal;
-    font-size: 28px;
+    font-style: oblique;
+    font-size: 26px;
     padding-bottom: 8px;
 }
 .h3{
     text-align: center;
     align-items: center;
-}
-.container{
-    background-color: blanchedalmond;
 }
 </style>
 
@@ -34,8 +22,36 @@
 
 {% include "./sidebar.html" %}
 
-<div class="container ">
-    <p class="h3">Stats</p>
+<div class="main--content">
+    <div class="header--wrapper">
+        <div class="header--title">
+            
+            <h3>Statistics</h3>
+        </div>
+        <div class="user--info">
+            <span>Welcome, {{ user.username }}</span>
+            <img src=
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR866XyS0-IpBpUrxAzWsdgHOgSBeHGl-GKeQ&s" 
+            alt="">
+        </div>
+    </div>
+    <div class="row">
+        {% for balance in account_balances %}
+        <div class="col-md-3 mb-4"> 
+            <div class="card--wrapper">
+                <div class="payment--card light-blue">
+                    <div class="card--header">
+                        <div class="amount">
+                            <span class="title">{{ balance.account }}</span>
+                            <span class="amount--value">{{ balance.balance|intcomma }}</span>
+                        </div>
+                        <i class="fa-solid fa-wallet" id="icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 
     <div class="row mt-2">
         <div class="col-md-4">
@@ -63,19 +79,6 @@
             </div>
         </div>
     </div>
-
-
-
-    <!-- <div class="row mt-2">
-        <div class="col-md-7">
-            <div class="card">
-                <div class="container-card bg-blue-box">
-                    <p class="card-title">Expense by Category</p>
-                    <canvas id="chart_expense" width="50" height="50"></canvas>
-                </div>
-            </div>
-        </div>
-    </div> -->
 
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -114,7 +117,7 @@
                 labels: ['Expenses', 'Income', 'Initial Balance'],
                 datasets: [{
                     label: 'EXPENSE VS INCOME vs INITIAL BALANCE',
-                    data: [{{ total_expenses }}, {{ total_income }}, {{ total_initialbalance }}],
+                    data: [{{ total_expenses }}, {{ total_income }}, {{ total_starting_balance }}],
                     backgroundColor: [
                         'rgba(242, 38, 19, 1)',
                         'rgba(8, 128, 7, 1.0)',
@@ -166,4 +169,5 @@
     });
     </script>
 
+</div>
 {% endblock %}

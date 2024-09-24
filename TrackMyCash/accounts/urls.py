@@ -3,8 +3,7 @@ from . import views
 from .views import \
         ExpenseTransactionUpdateView, \
         IncomeTransactionUpdateView, \
-        PasswordResetView, \
-        AccountBalanceView \
+        PasswordResetView
 
 from django.contrib.auth import views as auth_views
 
@@ -24,7 +23,6 @@ urlpatterns = [
     path('dashboard/addtransaction/addincome/<int:pk>/', IncomeTransactionUpdateView.as_view(), name='income-edit'),
     path('dashboard/<int:pk>/delete/<str:model_type>/', views.delete_transaction, name='deleteTransaction'),
 
-    path('dashboard/accounts/', AccountBalanceView.as_view(), name='account'),
     path("dashboard/statistics/", views.statistics, name="statistics"),
     path("dashboard/profile/", views.profile, name="profile"),
     # path("dashboard/profile/", views.startingbalanceupdate, name="startingbalance"),
