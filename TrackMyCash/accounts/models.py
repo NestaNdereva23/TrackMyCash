@@ -2,6 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.core.validators import MinValueValidator
+
 
 ACCOUNT_CATEGORY = [
         ("Mpesa", "Mpesa"),
@@ -73,7 +75,7 @@ class Income(models.Model):
     account = models.CharField(max_length=15, choices=ACCOUNT_CATEGORY, default="Cash")
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     category = models.CharField(max_length=30, choices=INCOME_CATEGORY, default="Salary")
-    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     description = models.CharField(max_length=1000, blank=True, null=True)
     date_added = models.DateTimeField(default=timezone.now)
 

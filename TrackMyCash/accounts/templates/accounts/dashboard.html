@@ -155,9 +155,9 @@
                                 hx-post="{% url 'deleteTransaction' transaction.pk 'expense' %}"
                                 hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
                                 <i class="fa fa-trash" aria-hidden="true"></i></button></td>
-                                
+
                             {% else %}
-                             <td><a class="btn btn-secondary" href="#"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                             <td><a class="btn btn-secondary" href="{% url 'transfer-edit' transaction.pk %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
                              <td><button class="btn btn-secondary"
                                 hx-post="{% url 'deleteTransaction' transaction.pk 'transfer' %}"
                                 hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>

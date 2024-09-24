@@ -117,12 +117,12 @@ def addtransactionPage(request):
             expense.save()
 
             with transaction.atomic():
-                balance, created = AccountBalance.objects.get_or_create(
+                exp_balance, created = AccountBalance.objects.get_or_create(
                     user=request.user,
                     account=expense.account
                 )
-                balance.balance -= expense.amount
-                balance.save()
+                exp_balance.balance -= expense.amount
+                exp_balance.save()
 
             return redirect('dashboard')        
     else:
@@ -142,12 +142,18 @@ def addincomePage(request):
 
             with transaction.atomic():
                 
-                balance, created = AccountBalance.objects.get_or_create(
+                inc_balance, created = AccountBalance.objects.get_or_create(
                     user=request.user,
                     account=income.account
                 )
-                balance.balance += income.amount
-                balance.save()
+
+                if income.amount < 0:
+                    messages.warning(request, "Income cant be less than 0")
+                    return render(request, "accounts/addincome.html", {"form":form})
+                else:
+
+                    inc_balance.balance += income.amount
+                    inc_balance.save()
 
             return redirect('dashboard')
     else:
@@ -240,15 +246,23 @@ class ExpenseTransactionUpdateView(LoginRequiredMixin, UpdateView):
     model = Expenses
     form_class = ExpenseForm
     template_name = "accounts/addtransaction.html"
-    success_url = "/trackmycash/dashboard/"
+    success_url = "/dashboard/"
     login_url = reverse_lazy("login")
 
 class IncomeTransactionUpdateView(LoginRequiredMixin, UpdateView):
     model = Income
     form_class = IncomeForm
     template_name = "accounts/addincome.html"
-    success_url = "/trackmycash/dashboard/"
+    success_url = "/dashboard/"
     login_url = reverse_lazy("login")
+
+class TransferUpdateView(LoginRequiredMixin, UpdateView):
+    model = Transfer
+    form_class = TransferForm
+    template_name = "accounts/transfer.html"
+    success_url = "/dashboard/"
+    login_url = reverse_lazy("login")
+
 
 class CustomPasswordResetView(PasswordResetView):
     model = User
