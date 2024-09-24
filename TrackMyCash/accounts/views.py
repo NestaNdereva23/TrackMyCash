@@ -82,7 +82,7 @@ def dashboard(request):
     balance = AccountBalance.objects.filter(user=request.user).aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
-    current_balance = balance - total_expenses
+    current_balance = balance
 
     #combine exenses and incomes
     transactions = list(expenses) + list(incomes) + list(transfer)
@@ -123,7 +123,7 @@ def addtransactionPage(request):
                 )
                 balance.balance -= expense.amount
                 balance.save()
-                
+
             return redirect('dashboard')        
     else:
          form = ExpenseForm()   
@@ -200,15 +200,39 @@ def delete_transaction(request, pk, model_type):
 
     if model_type == 'expense':
         transaction = get_object_or_404(Expenses, pk=pk)
+
+        acc_balance = AccountBalance.objects.get(user=request.user, account=transaction.account)
+
+        #update the balance
+        acc_balance.balance += transaction.amount
+        acc_balance.save()
+
     elif model_type == 'income':
         transaction = get_object_or_404(Income, pk=pk)
+        acc_balance = AccountBalance.objects.get(user=request.user, account=transaction.account)
+
+        #update the balance
+        acc_balance.balance -= transaction.amount
+        acc_balance.save()
+
     elif model_type == 'transfer':
         transaction = get_object_or_404(Transfer, pk=pk)
+
+        from_account = AccountBalance.objects.get(user=request.user, account=transaction.from_account)
+        to_account = AccountBalance.objects.get(user=request.user, account=transaction.to_account)
+
+        from_account.balance += transaction.amount
+        to_account.balance -= transaction.amount
+
+        from_account.save()
+        to_account.save()
     else:
-        return HttpResponse('eRROR')
+        return HttpResponse('Error: Invalid transaction type')
     
     transaction.delete()
     return HttpResponse("")
+
+
     
 class ExpenseTransactionUpdateView(LoginRequiredMixin, UpdateView):
     model = Expenses
