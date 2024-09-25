@@ -79,7 +79,93 @@
             </div>
         </div>
     </div>
+    <div class="row mt-2">
+        <div class="col-md-4">
+            <div class="card">
+                <form method="get" action="" style="width: 400px;" class="form-contol">
+                    <!-- {% csrf_token %} -->
+                <div class="form-contol">
+                    {{filters.form.as_p}}
+                </div>
+                <button type="submit" class="btn btn-warning">Search</button>
+                    
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="tabular--wrapper">
+                    <h3 class="main--title">Transactions</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Transaction type</th>
+                                    <th>Account</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>Date</th>
+                                    <th>Update</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            {% for transaction in filters.qs %}
+                            
+                            <tbody >
+                                <tr hx-target="this" hx-swap="outerHTML" >
+                                    {% if transaction.transaction_type == 'Income' %}
+                                    <td class="text-success"">{{transaction.transaction_type}}</td>
+                                    {% elif transaction.transaction_type == 'Expense' %}
+                                    <td class="text-danger"">{{transaction.transaction_type}}</td>
+                                    {% else %}
+                                    <td class="text-primary"">{{transaction.transaction_type}}</td>
+                                    {% endif %}
+        
+                                    {% if transaction.transaction_type == 'Transfer' %}
+                                    <td>{{ transaction.from_account}} to {{ transaction.to_account}}</td>
+                                    {% else %}
+                                    <td>{{ transaction.account }}</td>
+                                    {% endif %}
+        
+                                    <td>{{ transaction.category }}</td>
+                                    <td>{{ transaction.amount|intcomma }}</td>
+                                    <!-- <td>{{ transaction.description }}</td> -->
+                                     <td>{{ transaction.date_added }}</td>
+                                    
+                                     {% if transaction.transaction_type == 'Income' %}
+                                     <td><a class="btn btn-success" href="{% url 'income-edit' transaction.pk %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                     <td><button class="btn btn-success" 
+                                        hx-post="{% url 'deleteTransaction' transaction.pk 'income' %}"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                        <i class="fa fa-trash" aria-hidden="true"></i></button></td>
+        
+                                    {% elif transaction.transaction_type == 'Expense' %}
+                                     <td><a class="btn btn-danger" href="{% url 'expense-edit' transaction.pk %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                     <td><button class="btn btn-danger" 
+                                        hx-post="{% url 'deleteTransaction' transaction.pk 'expense' %}"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                        <i class="fa fa-trash" aria-hidden="true"></i></button></td>
+        
+                                    {% else %}
+                                     <td><a class="btn btn-secondary" href="{% url 'transfer-edit' transaction.pk %}"><i class="fa-solid fa-pen-to-square"></i></a></td>
+                                     <td><button class="btn btn-secondary"
+                                        hx-post="{% url 'deleteTransaction' transaction.pk 'transfer' %}"
+                                        hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+                                        
+                                        <i class="fa fa-trash" aria-hidden="true"></i> </button></td>
+                                    {% endif %}
+        
+                                    
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+    </div>
     <!-- Include Chart.js library -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 

@@ -14,6 +14,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
 from django.db import transaction
 from django.core.exceptions import ValidationError
+from datetime import datetime
+from .filters import ExpenseFilter
 
 
 #landingpage view
@@ -72,13 +74,19 @@ def initialize_balance(user):
 @login_required
 def dashboard(request):
 
-    #display added expenses return for current user
-    expenses = Expenses.objects.filter(user=request.user)
-    incomes = Income.objects.filter(user=request.user)
-    transfer = Transfer.objects.filter(user=request.user)
+    #get current year and month
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+
+    #display added expenses return for current user for the current month
+    expenses = Expenses.objects.filter(user=request.user,date_added__year=current_year, date_added__month=current_month)
+    incomes = Income.objects.filter(user=request.user,date_added__year=current_year, date_added__month=current_month)
+    transfer = Transfer.objects.filter(user=request.user,date_added__year=current_year, date_added__month=current_month)
     startingbalanc =  AccountBalance.objects.filter(user=request.user)
     
     total_startingbalance = startingbalanc.aggregate(total=Sum('startingbalance'))['total'] or 0
+    if total_startingbalance == 0:
+        return redirect('profile')
     balance = AccountBalance.objects.filter(user=request.user).aggregate(total=Sum('balance'))['total'] or 0
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
@@ -88,9 +96,6 @@ def dashboard(request):
     transactions = list(expenses) + list(incomes) + list(transfer)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
-    if total_startingbalance == 0:
-        return redirect('profile')
-  
     return render(request, "accounts/dashboard.html",{
         "transactions":transactions, 
         "total_expenses":total_expenses, 
@@ -147,13 +152,8 @@ def addincomePage(request):
                     account=income.account
                 )
 
-                if income.amount < 0:
-                    messages.warning(request, "Income cant be less than 0")
-                    return render(request, "accounts/addincome.html", {"form":form})
-                else:
-
-                    inc_balance.balance += income.amount
-                    inc_balance.save()
+                inc_balance.balance += income.amount
+                inc_balance.save()
 
             return redirect('dashboard')
     else:
@@ -289,6 +289,8 @@ def statistics(request):
     transactions = list(expenses) + list(incomes) + list(transfers)
     transactions.sort(key=lambda x: x.date_added, reverse=True)
 
+    f = ExpenseFilter(request.GET, queryset=Expenses.objects.filter(user=request.user))
+
     return render(request, "partials/statistics.html", {
         "transactions": transactions, 
         "total_expenses": total_expenses, 
@@ -297,6 +299,7 @@ def statistics(request):
         "total_starting_balance": total_starting_balance,
         "expense_by_category": expense_by_category,
         "account_balances": account_balances,
+        "filters":f
     })
 
 

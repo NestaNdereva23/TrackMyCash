@@ -104,6 +104,7 @@
                 <a href="{% url 'addtransaction' %}" class="btn btn-secondary">Add Expense <br> + </a>
             </div>
         </div>
+
         <div class="tabular--wrapper">
             <h3 class="main--title">Transactions</h3>
             <div class="table-container">
@@ -177,6 +178,13 @@
                 </table>
             </div>
         </div>
+        <!-- <div>
+            {% for f in filters.qs %}
+               <p>{{f.transaction_type}}</p>
+               <p>{{f.category}}</p> 
+            {% endfor %}
+        </div> -->
+
     </div>
 
 </body>
