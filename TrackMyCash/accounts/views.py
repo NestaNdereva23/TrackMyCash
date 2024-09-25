@@ -280,7 +280,7 @@ def statistics(request):
     total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
     total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
     
-    # Assuming AccountBalance now has 'startingbalance' and 'balance' fields
+   
     total_starting_balance = account_balances.aggregate(total=Sum('startingbalance'))['total'] or 0
     current_balance = account_balances.aggregate(total=Sum('balance'))['total'] or 0
 
