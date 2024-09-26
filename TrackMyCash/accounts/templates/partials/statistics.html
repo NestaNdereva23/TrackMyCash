@@ -9,7 +9,7 @@
     letter-spacing: -0.02em;
     line-height: 40px;
     font-style: oblique;
-    font-size: 26px;
+    font-size: 24px;
     padding-bottom: 8px;
 }
 .h3{
@@ -58,7 +58,7 @@
             <div class="card">
                 <div class="container-card bg-blue-box">
                     <p class="card-title">Expense vs Income</p>
-                    <canvas id="chart-expense-vs-income" width="50" height="57.5"></canvas>
+                    <canvas id="chart-expense-vs-income" width="50" height="50.5"></canvas>
                 </div>        
             </div>
         </div>
@@ -74,7 +74,7 @@
             <div class="card">
                 <div class="container-card bg-blue-box">
                     <p class="card-title">Expense by Category</p>
-                    <canvas id="chart_expense" width="250" height="200"></canvas>
+                    <canvas id="chart_expense" width="250" height="20"></canvas>
                 </div>
             </div>
         </div>
@@ -82,24 +82,26 @@
     <div class="row mt-2">
         <div class="col-md-4">
             <div class="card">
-                <form method="get" action="" style="width: 400px;" class="form-contol m-2">
+                <form method="get" hx-swap="outerHTML"
+                hx-target="#table" 
+                action="" style="width: 300px;" class="form-contol m-2">
                     <!-- {% csrf_token %} -->
-
-                <div class="col-auto form-contol">
+                {{filters.form.as_p}}
+                <!-- <div class="col-auto form-contol">
                     {{filters.form.account}}
                 </div>
 
                 <div class="col-auto form-contol">
                     {{filters.form.category}}
-                </div>
+                </div> -->
                 <button type="submit" class="btn btn-warning">Search</button>
                     
                 </form>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-8 col-sm-4">
             <div class="card">
-                <div class="tabular--wrapper">
+                <div class="tabular--wrapper" id="table">
                     <h3 class="main--title">Transactions</h3>
                     <div class="table-container">
                         <table>

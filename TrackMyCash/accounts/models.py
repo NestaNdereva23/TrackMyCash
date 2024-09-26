@@ -2,7 +2,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
+from datetime import date
 
 
 ACCOUNT_CATEGORY = [
@@ -45,7 +46,7 @@ class Expenses(models.Model):
     category = models.CharField(max_length=15, choices=EXPENSE_CATEGORY, default="Car")    
     description = models.CharField(max_length=1000, blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    date_added = models.DateTimeField(default=timezone.now)
+    date_added = models.DateTimeField(default=timezone.now, validators=[MaxValueValidator(limit_value=timezone.now)])
 
     #ordering transactions
     class Meta:
@@ -77,7 +78,7 @@ class Income(models.Model):
     category = models.CharField(max_length=30, choices=INCOME_CATEGORY, default="Salary")
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0, validators=[MinValueValidator(0)])
     description = models.CharField(max_length=1000, blank=True, null=True)
-    date_added = models.DateTimeField(default=timezone.now)
+    date_added = models.DateTimeField(default=timezone.now, validators=[MaxValueValidator(limit_value=timezone.now)])
 
     class Meta:
         ordering = ['-date_added']
@@ -96,7 +97,7 @@ class Transfer(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     amount = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     description = models.CharField(max_length=1000, blank=True, null=True)
-    date_added = models.DateTimeField(default=timezone.now)
+    date_added = models.DateTimeField(default=timezone.now, validators=[MaxValueValidator(limit_value=timezone.now)])
 
     class Meta:
         ordering = ['-date_added']
@@ -112,8 +113,8 @@ class AccountBalance(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     startingbalance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    last_updated = models.DateTimeField(auto_now=True)
-    date_added = models.DateTimeField(default=timezone.now)
+    last_updated = models.DateTimeField(auto_now=True, validators=[MaxValueValidator(limit_value=timezone.now)])
+    date_added = models.DateTimeField(default=timezone.now, validators=[MaxValueValidator(limit_value=timezone.now)])
 
     class Meta:
         unique_together = ['account', 'user']
