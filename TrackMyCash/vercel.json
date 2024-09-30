@@ -1,13 +1,13 @@
 {
-    "build": [
+    "builds": [
         {
             "src": "TrackMyCash/wsgi.py",
             "use": "@vercel/python",
             "config": {
                 "maxLambdaSize": "15mb",
-                "runtime": "python3.12",
-                "buildCommand": "bash setup.sh"
-            }
+                "runtime": "python3.12.3",
+                "buildCommand": "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput"
+            }    
         }
     ],
     "routes": [
