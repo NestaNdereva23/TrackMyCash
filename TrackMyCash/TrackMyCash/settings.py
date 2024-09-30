@@ -25,8 +25,10 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-# ALLOWED_HOSTS = []
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+ALLOWED_HOSTS = [
+    '.vercel.app',
+]
+# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # Application definition
 
@@ -77,40 +79,41 @@ WSGI_APPLICATION = 'TrackMyCash.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 SQLITE_DB_PATH = os.path.join(BASE_DIR, 'db.sqlite3')
     
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': SQLITE_DB_PATH,
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': SQLITE_DB_PATH,
+#     }
+# }
 
-# SQLITE_DB_PATH = env('SQLITE_DB_PATH', default='./TrackMyCash/')
-# DATABASE_TYPE = env('DATABASE_TYPE', default='sqlite')
+SQLITE_DB_PATH = env('SQLITE_DB_PATH', default='./TrackMyCash/')
+DATABASE_TYPE = env('DATABASE_TYPE', default='postgresql')
 
-# SQLITE_DB_PATH = os.path.join(BASE_DIR, env('SQLITE_DB_PATH'))
+SQLITE_DB_PATH = os.path.join(BASE_DIR, env('SQLITE_DB_PATH'))
 
-# if env('DATABASE_TYPE') == 'sqlite':
+if env('DATABASE_TYPE') == 'sqlite':
     
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': SQLITE_DB_PATH,
-#         }
-#     }
-# elif env('DATABASE_TYPE') == 'postgresql':
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': env('POSTGRES_DB_NAME'),
-#             'USER': env('POSTGRES_DB_USER'),
-#             'PASSWORD': env('POSTGRES_DB_PASSWORD'),
-#             'HOST': env('POSTGRES_DB_HOST'),
-#             'PORT': env('POSTGRES_DB_PORT'),
-#         }
-#     }
-# else:
-#     raise ValueError("Unknown database type specified in DATABASE_TYPE.")
-# [...]
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': SQLITE_DB_PATH,
+    #     }
+    #}
+    pass
+elif env('DATABASE_TYPE') == 'postgresql':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('POSTGRES_DB_NAME'),
+            'USER': env('POSTGRES_DB_USER'),
+            'PASSWORD': env('POSTGRES_DB_PASSWORD'),
+            'HOST': env('POSTGRES_DB_HOST'),
+            'PORT': env('POSTGRES_DB_PORT'),
+        }
+    }
+else:
+    raise ValueError("Unknown database type specified in DATABASE_TYPE.")
+[...]
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -147,6 +150,14 @@ USE_TZ = True
 STATIC_URL = 'static/'
 # STATICFILES_DIRS = [ os.path.join (BASE_DIR,  'static'),
                     # ]
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
