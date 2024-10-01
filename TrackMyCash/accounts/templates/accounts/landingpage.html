@@ -14,54 +14,102 @@
 
 </head>
 <body>
-    <div class="main--wrapper">
-        <div class="nav-section">
         <nav>
-            <div class="section-tag">TrackCashApp</div><br>
-            <ul class="nav-links">
-                <li>
-                    <a href="{% url 'landingpage' %}">Client</a></li>           
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'register' %}">Register</a></li>
+            <div class="logo">
+              <img src="assets/Logo64x64.png" alt="logo" />
+              <h1>LOGO</h1>
+            </div>
+            <ul>
+              <li>
+                <a href="{% url 'landingpage' %}">Home</a>
+              </li>
+              <li>
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+              <li>
+                <a href="{% url 'register' %}">Register</a>
+              </li>
+              <li>
+                <a href="#">Contact Us</a>
+              </li>
             </ul>
+            <div class="hamburger">
+              <span class="line"></span>
+              <span class="line"></span>
+              <span class="line"></span>
+            </div>
         </nav>
-        </div> 
-        <div class="background">
-            <div class="shape"></div>
-            <div class="shape"></div>
+        <div class="menubar">
+            <ul>
+              <li>
+                <a href="{% url 'landingpage' %}">Home</a>
+              </li>
+              <li>
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+              <li>
+                <a href="{% url 'register' %}">Register</a>
+              </li>
+              <li>
+                <a href="#">Contact Us</a>
+              </li>
+            </ul>
         </div>
-        <div class="section-block">
-            <h2 class="h2">Decentralized. Efficient. Simple</h2><br>
-            <p class="p-2">"TrackCashApp is a cutting-edge 
-                expense management tool, designed to help you 
-                effortlessly monitor and control your finances.
-                 By utilizing smart algorithms, TrackCashApp 
-                 categorizes your spending, provides insightful 
-                 reports, and helps you stay within your budget, 
-                 making financial planning simpler and more 
-                 efficient."
-            </p> <br>
-            <img class="img-bloc2" src=
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0wwP9PZhh9nX60YQV5vlGBy0v6MmlsUMDeg&s"
-            alt=
-            ""
-            >  
-    </div>
-        <div class="section-bloc">
-            <h2 class="h22">Keep Track of your Expenses, <br> Income, <br> Budgets on the Go...</h2>
-            <img class="img-bloc" src=
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJZ4tfpH1VsWHNlHtDpWXBHAO8GTnAPF3D4w&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQotaDWWkpfJAodxfYyUTDkrM-INBu87p8ENw&s" 
+        <div class="parent">
+
+            <div class="background">
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
             
-            alt=
-            ""
-            >   
-    </div>
-    
+            <div class="div1">
+                <h2 class="h2">Decentralized. Efficient. Simple</h2>
+                <h3 class="p-2">"TrackCashApp is a cutting-edge 
+                    expense management tool, designed to help you 
+                    effortlessly monitor and control your finances. 
+                    By utilizing smart algorithms, TrackCashApp 
+                    categorizes your spending, provides insightful
+                    reports, and helps you stay within your budget, 
+                    making financial planning simpler and more 
+                    efficient."
+                </h3>
+
+            </div>
+            <div class="div2">
+                <img class="img-bloc2" src=
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0wwP9PZhh9nX60YQV5vlGBy0v6MmlsUMDeg&s"
+                alt=
+                ""
+                > 
+            </div>
+
+            <div class="div3">
+                <img class="img-bloc" src=
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJZ4tfpH1VsWHNlHtDpWXBHAO8GTnAPF3D4w&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQotaDWWkpfJAodxfYyUTDkrM-INBu87p8ENw&s" 
+                
+                alt=
+                ""
+                > 
+            </div>
+            <div class="div4">
+                <h2 class="h22">Keep Track of your Expenses, <br> Income, <br> Budgets on the Go...</h2>
+            </div>
+            
+  
+                </div>
+            </div>
+        </div>
         
-    </div>
-    
+        <script>
+            const mobileNav = document.querySelector(".hamburger");
+            const navbar = document.querySelector(".menubar");
 
+            const toggleNav = () => {
+            navbar.classList.toggle("active");
+            mobileNav.classList.toggle("hamburger-active");
+            };
+            mobileNav.addEventListener("click", () => toggleNav());
 
-    
+        </script>
 </body>
 </html>
