@@ -51,7 +51,7 @@ def loginPage(request):
 
         if user is not None:
             login(request, user)
-            request.session.set_expiry(3600)
+            request.session.set_expiry(86400)
             return redirect('dashboard')
         else:
             messages.warning(request, "Invalid credentials")

@@ -28,7 +28,7 @@ DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = [
     '.vercel.app',
 ]
-#ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+# ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 
 # Application definition
 
@@ -179,7 +179,7 @@ EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
 EMAIL_USE_SSL = env.bool('EMAIL_USE_SSL')
 DEFAULT_FROM_EMAIL  = env('DEFAULT_FROM_EMAIL')
 
-SESSION_COOKIE_AGE=86400
+SESSION_COOKIE_AGE=259200
 SESSION_EXPIRE_AT_BROWSER_CLOSE=False
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_SECURE = True

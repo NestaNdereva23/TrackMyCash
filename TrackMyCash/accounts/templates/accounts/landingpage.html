@@ -2,114 +2,108 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrackMyCash</title>
-    <link rel="stylesheet" href="{% static 'css/main.css' %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"> -->
-
+  <title>Home</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta property="og:type" content="website">
+  <meta name="robots" content="index,follow">
+  <!-- <meta name="generator" content="GrapesJS Studio"> -->
+  <!-- <link rel="stylesheet" href="./style.css"> -->
+  <link rel="stylesheet" href="{% static 'css/landingpage.css'%}">
 </head>
-<body>
-        <nav>
-            <div class="logo">
-              <img src="https://www.logologo.com/logos/detailed-fire-lion-free-logoa.jpg" alt="logo" />
-              <h1>LOGO</h1>
+<body id="iau9">
+  <div id="i6po" class="gjs-grid-row">
+    <div id="itjq" class="gjs-grid-column">
+      <div id="iyd2" class="gjs-grid-row">
+        <div id="iqjl" class="gjs-grid-column"><a id="iucmr" href="/" class="gjs-link-box">
+            <div data-type-icon id="irfl3k" class="gjs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 40 40"><path fill="#F06225" d="M20 0c11.046 0 20 8.954 20 20v14a6 6 0 0 1-6 6H21v-8.774c0-2.002.122-4.076 1.172-5.78a10 10 0 0 1 6.904-4.627l.383-.062a.8.8 0 0 0 0-1.514l-.383-.062a10 10 0 0 1-8.257-8.257l-.062-.383a.8.8 0 0 0-1.514 0l-.062.383a9.999 9.999 0 0 1-4.627 6.904C12.85 18.878 10.776 19 8.774 19H.024C.547 8.419 9.29 0 20 0Z"></path><path fill="#F06225" d="M0 21h8.774c2.002 0 4.076.122 5.78 1.172a10.02 10.02 0 0 1 3.274 3.274C18.878 27.15 19 29.224 19 31.226V40H6a6 6 0 0 1-6-6V21ZM40 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"></path></svg></div>
+          </a></div>
+        <div id="iffs" class="gjs-grid-column">
+          <div id="it00l" class="gjs-grid-row">
+            <div id="irtfd" class="gjs-grid-column"><a id="icfyb" href="{% url 'login' %}" class="gjs-link">Login</a>
+              <a href="{% url 'register' %}" id="infmy1" class="gjs-link">Register</a>
             </div>
-            <ul>
-              <li>
-                <a href="{% url 'landingpage' %}">Home</a>
-              </li>
-              <li>
-                <a href="{% url 'login' %}">Login</a>
-              </li>
-              <li>
-                <a href="{% url 'register' %}">Register</a>
-              </li>
-              <li>
-                <a href="#">Contact Us</a>
-              </li>
-            </ul>
-            <div class="hamburger">
-              <span class="line"></span>
-              <span class="line"></span>
-              <span class="line"></span>
+            <div id="icyzp" class="gjs-grid-column"><a id="i88iz" href="#testimonial-section" class="gjs-link">About</a>
             </div>
-        </nav>
-        <div class="menubar">
-            <ul>
-              <li>
-                <a href="{% url 'landingpage' %}">Home</a>
-              </li>
-              <li>
-                <a href="{% url 'login' %}">Login</a>
-              </li>
-              <li>
-                <a href="{% url 'register' %}">Register</a>
-              </li>
-              <li>
-                <a href="#">Contact Us</a>
-              </li>
-            </ul>
+          </div>
         </div>
-        <div class="parent">
-
-            <div class="background">
-                <div class="shape"></div>
-                <div class="shape"></div>
-            </div>
-            
-            <div class="div1">
-                <h2 class="h2">Decentralized. Efficient. Simple</h2>
-                <h3 class="p-2">"TrackCashApp is a cutting-edge 
-                    expense management tool, designed to help you 
-                    effortlessly monitor and control your finances. 
-                    By utilizing smart algorithms, TrackCashApp 
-                    categorizes your spending, provides insightful
-                    reports, and helps you stay within your budget, 
-                    making financial planning simpler and more 
-                    efficient."
-                </h3>
-
-            </div>
-            <div class="div2">
-                <img class="img-bloc2" src=
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0wwP9PZhh9nX60YQV5vlGBy0v6MmlsUMDeg&s"
-                alt=
-                ""
-                > 
-            </div>
-
-            <div class="div3">
-                <img class="img-bloc" src=
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJZ4tfpH1VsWHNlHtDpWXBHAO8GTnAPF3D4w&shttps://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQotaDWWkpfJAodxfYyUTDkrM-INBu87p8ENw&s" 
-                
-                alt=
-                ""
-                > 
-            </div>
-            <div class="div4">
-                <h2 class="h22">Keep Track of your Expenses, <br> Income, <br> Budgets on the Go...</h2>
-            </div>
-            
-  
-                </div>
-            </div>
+      </div>
+    </div>
+  </div>
+  <div id="irz7b" class="gjs-grid-row">
+    <div id="iycz3" class="gjs-grid-column">
+      <h1 id="irjua" class="gjs-heading">Efficient, Decentralized, Simple</h1>
+      <div id="itndw" class="text-main-content">Keep track of your income, expenses, budgets on the Go</div><a
+        id="iar3s" class="gjs-button" href="{% url 'login' %}">Get Started</a><img id="i3vvs" 
+        src="https://images.pexels.com/photos/6694533/pexels-photo-6694533.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+        />
+    </div>
+  </div>
+  <div id="feature-section" class="gjs-grid-row">
+    <div id="imymf" class="gjs-grid-column">
+      <div id="ib541" class="gjs-grid-row">
+        <div id="iz8m8" class="gjs-grid-column">
+          <h2 id="ism014" class="gjs-heading">Expenses</h2>
+          <div id="igrx8" class="text-main-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua.</div><a id="iqx3z1" class="gjs-button">Getting
+            Started</a>
         </div>
-        
-        <script>
-            const mobileNav = document.querySelector(".hamburger");
-            const navbar = document.querySelector(".menubar");
-
-            const toggleNav = () => {
-            navbar.classList.toggle("active");
-            mobileNav.classList.toggle("hamburger-active");
-            };
-            mobileNav.addEventListener("click", () => toggleNav());
-
-        </script>
+        <div id="iepks" class="gjs-grid-column"><img 
+          src="https://images.pexels.com/photos/8927682/pexels-photo-8927682.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" id="i466d"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="ioyxg" class="gjs-grid-row">
+    <div id="i8w4i" class="gjs-grid-column">
+      <h2 id="iiacm" class="gjs-heading">Why TrackCash?</h2>
+      <div id="ia21sa" class="text-main-content">TrackCash is a cutting-edge expense management tool, designed to help
+        you efffortlessy monitor and control your finance</div>
+      <div id="ixzh1" class="gjs-grid-row">
+        <div id="ilpi3" class="gjs-grid-column feature-item">
+          <div data-type-icon id="ipmqo6" class="gjs-icon gjs-feature-icon"><svg viewBox="0 0 24 24">
+              <path
+                d="M16 9h3l-5 7m-4-7h4l-2 8M5 9h3l2 7m5-12h2l2 3h-3m-5-3h2l1 3h-4M7 4h2L8 7H5m1-5L2 8l10 14L22 8l-4-6H6z">
+              </path>
+            </svg></div>
+          <h3 id="in9ef" class="gjs-heading">Analytics</h3>
+          <div id="i8isa" class="text-main-content">TrackCash comes with build in analytics tools to hellp in visually
+            analyze your  transactions.</div>
+        </div>
+        <div id="ic57kq" class="gjs-grid-column feature-item">
+          <div data-type-icon id="ibdusm" class="gjs-icon gjs-feature-icon"><svg viewBox="0 0 24 24">
+              <path
+                d="M16 9h3l-5 7m-4-7h4l-2 8M5 9h3l2 7m5-12h2l2 3h-3m-5-3h2l1 3h-4M7 4h2L8 7H5m1-5L2 8l10 14L22 8l-4-6H6z">
+              </path>
+            </svg></div>
+          <h3 id="ica43q" class="gjs-heading">Realtime Updates</h3>
+          <div id="ickn3f" class="text-main-content">Get realtime updates as your transactions mount up.</div>
+        </div>
+        <div id="idv32l" class="gjs-grid-column feature-item">
+          <div data-type-icon id="ipmept" class="gjs-icon gjs-feature-icon"><svg viewBox="0 0 24 24">
+              <path
+                d="M16 9h3l-5 7m-4-7h4l-2 8M5 9h3l2 7m5-12h2l2 3h-3m-5-3h2l1 3h-4M7 4h2L8 7H5m1-5L2 8l10 14L22 8l-4-6H6z">
+              </path>
+            </svg></div>
+          <h3 id="ieu6p6" class="gjs-heading">Budget Tracker</h3>
+          <div id="izqkf7" class="text-main-content">Budget Tracker inbuilt tool helps in ensuring the use keeps track
+            of their budget </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="iv3be5" class="gjs-grid-row">
+    <div id="ilriti" class="gjs-grid-column">
+      <div id="im0rle" class="gjs-grid-row">
+        <div id="iotp6j" class="gjs-grid-column"><a href="/" id="iih6cv" class="gjs-link-box">
+            <div data-type-icon id="ip6zoj" class="gjs-icon"><svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 40 40"><path fill="#F06225" d="M20 0c11.046 0 20 8.954 20 20v14a6 6 0 0 1-6 6H21v-8.774c0-2.002.122-4.076 1.172-5.78a10 10 0 0 1 6.904-4.627l.383-.062a.8.8 0 0 0 0-1.514l-.383-.062a10 10 0 0 1-8.257-8.257l-.062-.383a.8.8 0 0 0-1.514 0l-.062.383a9.999 9.999 0 0 1-4.627 6.904C12.85 18.878 10.776 19 8.774 19H.024C.547 8.419 9.29 0 20 0Z"></path><path fill="#F06225" d="M0 21h8.774c2.002 0 4.076.122 5.78 1.172a10.02 10.02 0 0 1 3.274 3.274C18.878 27.15 19 29.224 19 31.226V40H6a6 6 0 0 1-6-6V21ZM40 2a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"></path></svg></div>
+          </a></div>
+        <div id="i1hx7l" class="gjs-grid-column"><a id="ij7g8t" title="" href="##" class="gjs-link">Pricing<br/></a><a
+            id="ipjdtn" href="##" class="gjs-link">Terms &amp; Conditions<br/></a><a id="ikj01e" href="##"
+            class="gjs-link">Refund Policy<br/></a><a id="i2sl68" href="##" class="gjs-link">Contact Us<br/></a></div>
+      </div>
+      <div id="it6g1v" class="gjs-text-blue">Copyright © YEAR 2024 TrackCashApp/div>
+    </div>
+  </div>
 </body>
 </html>
