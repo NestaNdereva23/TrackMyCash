@@ -157,7 +157,7 @@ nav{
     left: 0;
     bottom: 0;
     width: 150px;
-    height: 100vh;
+    height: 100%;
     padding: 0 1.7rem;
     color: #f9f9f9;
     overflow: hidden;
@@ -425,13 +425,21 @@ tfoot td{
     background: none;
     cursor: pointer;
 }
+@media (max-width:768px) {
+
+
+}
+
+
+
+
 @media (max-width:480px) {
 	.sidebar{
-        position: relative;
+        position: static;
         top: 0;
         left: 0;
         bottom: 0;
-        width: 10px;
+        width: auto;
         height: 100vh;
         padding: 0 0rem;
         color: #f9f9f9;
@@ -446,5 +454,9 @@ tfoot td{
     .main--content{
         width: 100%;
         
+    }
+    .tabular--wrapper{
+        font-size: 9px;
+        width: auto;
     }
 }

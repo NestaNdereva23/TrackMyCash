@@ -20,6 +20,7 @@ from .filters import ExpenseFilter
 
 #landingpage view
 def landingpage(request):
+    request.session.set_expiry(86400)
     return render(request, "accounts/landingpage.html")
 
 
@@ -54,7 +55,7 @@ def loginPage(request):
             request.session.set_expiry(86400)
             return redirect('dashboard')
         else:
-            messages.warning(request, "Invalid credentials")
+            messages.warning(request, "Invalid credentials!!!")
 
     return render(request, "registration/login.html")
 

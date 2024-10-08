@@ -36,10 +36,15 @@
         <h2 class="gjs-heading" id="i3vgwb">LogIn</h2>
         <form method="post" id="ihidcd">
             {% csrf_token %}
+            {% for message in messages %}
+            <p class="gjs-link">{{message}}</p>
+            {% endfor %}
+            
           <div id="i5gx9h"><label id="i8nfu7">Username</label><input type="text" name="username" id="i6fqpd"/></div>
           <div id="itbb4q"><label id="ic4u19">Password</label><input type="password" name="password" id="ik5g9i"/></div>
           <a class="gjs-link" href="{% url 'password_reset' %}"
             id="ik1zhr">Forgot password?</a>
+            
           <div id="ivonvi"><button type="submit" id="ip2hko">LogIn</button></div>
           <div id="iv5q3h">
             <div id="ielj6n">Don't have an account?</div><a class="gjs-link" id="ierjo1" href="{% url 'register' %}">Register</a>
